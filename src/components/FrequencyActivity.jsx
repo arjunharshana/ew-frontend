@@ -246,14 +246,14 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
         <div>
           <h2 style={{ fontSize: 14.5, fontWeight: 600, margin: 0 }}>Frequency activity</h2>
           <p style={{ fontSize: 12.5, color: 'var(--text-secondary)', margin: '2px 0 0' }}>
             Receiver scan history and detected transmissions
           </p>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, fontSize: 12, color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', gap: 14, fontSize: 12, color: 'var(--text-secondary)' }}>
           <LegendDot color={COLORS.hit} label="Intercepted" />
           <LegendDot color={COLORS.miss} label="Miss" />
           <LegendDot color={COLORS.falseAlarm} label="False alarm" />

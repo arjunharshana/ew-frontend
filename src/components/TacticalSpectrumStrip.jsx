@@ -20,16 +20,16 @@ export default function TacticalSpectrumStrip({ state }) {
       gap: 16
     }}>
       {/* Header */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 20 }}>📡</span>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
             TACTICAL SPECTRUM STRIP ({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz • 20 MHz IBW)
           </span>
         </div>
         
         {/* Legends */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 12, color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'var(--text-secondary)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
             <div style={{ width: 14, height: 14, background: 'var(--blue)', borderRadius: 3, boxShadow: '0 0 6px rgba(59, 130, 246, 0.5)' }}></div>
             Tuned Channel
