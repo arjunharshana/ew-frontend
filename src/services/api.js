@@ -58,6 +58,8 @@ export const api = {
   // Manual step - needed in mock-ML mode (no real WS stream to auto-advance),
   // and usable as a "Step" button against the live backend too.
   stepSession: (sessionId, steps) => postJSON(`/sessions/${sessionId}/step`, { steps }),
+  
+  setSpeed: (sessionId, speed) => postJSON(`/sessions/${sessionId}/speed`, { speed }),
 };
 
 export function wsURL() {

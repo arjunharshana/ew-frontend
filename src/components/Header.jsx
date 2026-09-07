@@ -4,26 +4,33 @@ export default function Header({ running, connectionStatus, schedulerVersion, on
   return (
     <header
       style={{
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        padding: '18px 28px 16px',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
+        alignItems: 'center',
+        padding: '16px 28px',
         borderBottom: '1px solid var(--border)',
         background: 'var(--bg-surface)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-        <div>
-          <h1 style={{ fontSize: 19, fontWeight: 600, margin: 0, letterSpacing: '-0.01em' }}>
-            Smart Scan Strategy
-          </h1>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '2px 0 0' }}>
-            Cognitive Electronic Support Receiver <span style={{ color: 'var(--text-muted)' }}>· SIH26055</span>
-          </p>
-        </div>
+      {/* Empty left column to balance grid */}
+      <div />
+
+      <div style={{ textAlign: 'center' }}>
+        <h1 style={{ 
+          fontSize: 28, 
+          fontWeight: 800, 
+          margin: 0, 
+          letterSpacing: '-0.02em',
+          fontFamily: "'Outfit', 'Inter', system-ui, sans-serif",
+          background: 'linear-gradient(135deg, var(--blue), var(--purple, #7C3AED))',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+          Smart Scan Strategy
+        </h1>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 20, justifySelf: 'end' }}>
         <span
           style={{
             display: 'inline-flex',

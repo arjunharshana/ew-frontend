@@ -10,28 +10,27 @@ export default function ScenarioSelector({ scenario, onChange, disabled, options
   const scenarios = options && options.length > 0 ? options : FALLBACK_SCENARIOS;
 
   return (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
-      Scenario
-      <select
-        value={scenario}
-        disabled={disabled}
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          fontSize: 13,
-          color: 'var(--text-primary)',
-          background: 'var(--bg-surface-secondary)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-sm)',
-          padding: '6px 10px',
-          cursor: disabled ? 'not-allowed' : 'pointer',
-        }}
-      >
-        {scenarios.map((s) => (
-          <option key={s.id} value={s.id}>
-            {s.name}
-          </option>
-        ))}
-      </select>
-    </label>
+    <select
+      value={scenario}
+      disabled={disabled}
+      onChange={(e) => onChange(e.target.value)}
+      style={{
+        fontSize: 13,
+        color: 'var(--text-primary)',
+        background: 'var(--bg-surface-secondary)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-sm)',
+        padding: '8px 12px',
+        width: '100%',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        boxSizing: 'border-box'
+      }}
+    >
+      {scenarios.map((s) => (
+        <option key={s.id} value={s.id}>
+          {s.name}
+        </option>
+      ))}
+    </select>
   );
 }

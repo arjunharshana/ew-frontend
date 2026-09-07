@@ -8,7 +8,7 @@ export default function PerformanceChart({ data }) {
       </span>
       <div style={{ flex: 1, minHeight: 0 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: -18 }}>
+          <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
             <CartesianGrid stroke="#EEF2F7" vertical={false} />
             <XAxis
               dataKey="t"

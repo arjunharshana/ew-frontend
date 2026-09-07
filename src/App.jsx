@@ -2,10 +2,9 @@ import { useState } from 'react';
 import Header from './components/Header.jsx';
 import PrimaryStatus from './components/PrimaryStatus.jsx';
 import FrequencyActivity from './components/FrequencyActivity.jsx';
-import NextScanPanel from './components/NextScanPanel.jsx';
+import TacticalSpectrumStrip from './components/TacticalSpectrumStrip.jsx';
 import PerformancePanel from './components/PerformancePanel.jsx';
 import PerformanceChart from './components/PerformanceChart.jsx';
-import ScanTimeline from './components/ScanTimeline.jsx';
 import SimulationControls from './components/SimulationControls.jsx';
 import TechnicalDrawer from './components/TechnicalDrawer.jsx';
 import EmitterDrawer from './components/EmitterDrawer.jsx';
@@ -57,16 +56,30 @@ export default function App() {
         }}
       >
         {/* Main visualization + decision panel */}
-        <div style={{ flex: '1 1 58%', minHeight: 0, display: 'flex', gap: 14 }}>
-          <div style={{ ...card, flex: '1 1 68%', minHeight: 0, padding: 18 }}>
-            <FrequencyActivity
-              scanHistory={sim.state.scanHistory}
-              predictedFrequency={sim.state.predictedFrequency}
-              bandsMhz={sim.state.bandsMhz}
-            />
+        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 0, display: 'flex', gap: 14 }}>
+          {/* Main Panel */}
+          <div style={{ flex: '1 1 68%', minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <TacticalSpectrumStrip state={sim.state} />
+            <div style={{ ...card, flex: '1 1 auto', minHeight: 0, padding: 18 }}>
+              <FrequencyActivity
+                scanHistory={sim.state.scanHistory}
+                predictedFrequency={sim.state.predictedFrequency}
+                bandsMhz={sim.state.bandsMhz}
+              />
+            </div>
           </div>
-          <div style={{ ...card, flex: '0 0 300px', minHeight: 0, padding: 22, overflowY: 'auto' }}>
-            <NextScanPanel state={sim.state} />
+          {/* Sidebar Controls */}
+          <div style={{ ...card, flex: '0 0 280px', minHeight: 0, padding: 22 }}>
+            <SimulationControls
+              running={sim.running}
+              scenario={sim.scenario}
+              setScenario={sim.setScenario}
+              scenarioOptions={sim.scenarioOptions}
+              selectedSchedulerId={sim.selectedSchedulerId}
+              setSelectedSchedulerId={sim.setSelectedSchedulerId}
+              schedulerOptions={sim.schedulerOptions}
+              actions={sim.actions}
+            />
           </div>
         </div>
 
@@ -80,22 +93,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* Recent scans */}
-        <div style={{ ...card, flex: '0 0 auto', padding: '12px 22px' }}>
-          <ScanTimeline recentScans={sim.state.recentScans} />
-        </div>
       </main>
 
-      <SimulationControls
-        running={sim.running}
-        scenario={sim.scenario}
-        setScenario={sim.setScenario}
-        scenarioOptions={sim.scenarioOptions}
-        selectedSchedulerId={sim.selectedSchedulerId}
-        setSelectedSchedulerId={sim.setSelectedSchedulerId}
-        schedulerOptions={sim.schedulerOptions}
-        actions={sim.actions}
-      />
+
 
       <TechnicalDrawer
         open={technicalOpen}

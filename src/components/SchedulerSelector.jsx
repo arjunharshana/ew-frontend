@@ -27,39 +27,39 @@ export default function SchedulerSelector({ selectedId, onChange, options }) {
   ];
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-secondary)' }}>
-      Scan Strategy Algorithm
+    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
       <button
         onClick={() => setOpen(!open)}
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          minWidth: 350,
+          width: '100%',
+          boxSizing: 'border-box',
           fontSize: 13,
           color: 'var(--text-primary)',
           background: 'var(--bg-surface-secondary)',
           border: '1px solid var(--border)',
           borderRadius: 'var(--radius-sm)',
-          padding: '6px 10px',
+          padding: '8px 12px',
           cursor: 'pointer',
           textAlign: 'left',
           boxShadow: 'var(--shadow-sm)'
         }}
       >
-        <span>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {selected.name} {selected.overall_ir ? `(${selected.overall_ir} IR)` : ''}
         </span>
-        <span style={{ fontSize: 10, marginLeft: 10 }}>▼</span>
+        <span style={{ fontSize: 10, marginLeft: 10, flexShrink: 0 }}>▼</span>
       </button>
 
       {open && (
         <div
           style={{
             position: 'absolute',
-            bottom: '120%',
+            top: '120%',
             left: 0,
-            width: 500,
+            width: '100%',
             maxHeight: 400,
             overflowY: 'auto',
             background: 'var(--bg-surface)',
@@ -67,7 +67,8 @@ export default function SchedulerSelector({ selectedId, onChange, options }) {
             borderRadius: 'var(--radius-md)',
             boxShadow: 'var(--shadow-lg)',
             zIndex: 50,
-            padding: 8
+            padding: 8,
+            boxSizing: 'border-box'
           }}
         >
           {categories.map((cat) => {

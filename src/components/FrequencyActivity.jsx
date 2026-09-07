@@ -10,6 +10,7 @@ const COLORS = {
   miss: '#94A3B8',
   falseAlarm: '#DC2626',
   predicted: '#D97706',
+  truth: '#EF4444',
 };
 
 function useElementSize() {
@@ -35,6 +36,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
   const [containerRef, size] = useElementSize();
   const canvasRef = useRef(null);
   const [hover, setHover] = useState(null);
+  const [showTruth, setShowTruth] = useState(false);
 
   // Fallback to FREQ_BIN_TABLE if bandsMhz is missing
   const freqValues = bandsMhz && bandsMhz.length > 0 ? bandsMhz : FREQ_BIN_TABLE.map((b) => b.freq);
@@ -56,18 +58,24 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, width, height);
 
-    const plotW = width - padding.left - padding.right;
     const plotH = height - padding.top - padding.bottom;
 
-    const history = scanHistory?.length ? scanHistory.slice(-70) : [];
+    const history = scanHistory || [];
     let tMin = history.length > 0 ? history[0].t : 0;
     let tMax = history.length > 0 ? history[history.length - 1].t + 1 : 10;
 
     // Enforce a minimum time window so points don't stretch across the whole graph on restart
     const MIN_WINDOW = 40;
     if (tMax - tMin < MIN_WINDOW) {
-      tMin = Math.max(0, tMax - MIN_WINDOW);
+      tMax = tMin + MIN_WINDOW;
     }
+
+    const pixelsPerStep = 15;
+    const computedWidth = Math.max(width, (tMax - tMin) * pixelsPerStep + padding.left + padding.right);
+    
+    canvas.width = computedWidth * dpr;
+    canvas.style.width = `${computedWidth}px`;
+    const plotW = computedWidth - padding.left - padding.right;
 
     const xForT = (t) => padding.left + ((t - tMin) / (tMax - tMin)) * plotW;
     const yForFreq = (f) => padding.top + (1 - (f - minFreq) / (maxFreq - minFreq)) * plotH;
@@ -82,7 +90,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
       const y = yForFreq(f);
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
-      ctx.lineTo(width - padding.right, y);
+      ctx.lineTo(computedWidth - padding.right, y);
       ctx.stroke();
     });
 
@@ -102,10 +110,27 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
     ctx.beginPath();
     ctx.moveTo(padding.left, padding.top);
     ctx.lineTo(padding.left, height - padding.bottom);
-    ctx.lineTo(width - padding.right, height - padding.bottom);
+    ctx.lineTo(computedWidth - padding.right, height - padding.bottom);
     ctx.stroke();
 
     if (history.length > 0) {
+      // emitter truth (drawn first so it stays behind scan markers)
+      if (showTruth) {
+        ctx.fillStyle = COLORS.truth;
+        history.forEach((pt) => {
+          if (pt.groundTruth && pt.groundTruth.length > 0) {
+            const x = xForT(pt.t);
+            pt.groundTruth.forEach((emitter) => {
+              const y = yForFreq(emitter.frequency_mhz);
+              ctx.beginPath();
+              // small distinct marker
+              ctx.arc(x, y, 2.0, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          }
+        });
+      }
+
       // trajectory line
       ctx.strokeStyle = COLORS.trajectory;
       ctx.lineWidth = 1.25;
@@ -125,7 +150,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         const color =
           pt.result === 'hit' ? COLORS.hit : pt.result === 'false_alarm' ? COLORS.falseAlarm : COLORS.miss;
         ctx.beginPath();
-        ctx.arc(x, y, pt.result === 'hit' ? 3 : 2.5, 0, Math.PI * 2);
+        ctx.arc(x, y, pt.result === 'hit' ? 3.5 : 2.5, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
       });
@@ -157,11 +182,23 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         ctx.setLineDash([]);
       }
     }
-  }, [scanHistory, predictedFrequency, bandsMhz, size]);
+  }, [scanHistory, predictedFrequency, bandsMhz, size, showTruth]);
 
   useEffect(() => {
     draw();
   }, [draw]);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const el = containerRef.current;
+      const isScrolledToRight = el.scrollWidth - el.clientWidth - el.scrollLeft < 100;
+      if (isScrolledToRight || !scanHistory || scanHistory.length <= 1) {
+        requestAnimationFrame(() => {
+          el.scrollLeft = el.scrollWidth;
+        });
+      }
+    }
+  }, [scanHistory]);
 
   const handleMouseMove = (e) => {
     if (!scanHistory?.length) return;
@@ -169,15 +206,19 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
 
-    const history = scanHistory.slice(-70);
+    const history = scanHistory || [];
     let tMin = history[0].t;
     let tMax = history[history.length - 1].t + 1;
     
     const MIN_WINDOW = 40;
     if (tMax - tMin < MIN_WINDOW) {
-      tMin = Math.max(0, tMax - MIN_WINDOW);
+      tMax = tMin + MIN_WINDOW;
     }
-    const plotW = rect.width - padding.left - padding.right;
+    
+    const pixelsPerStep = 15;
+    const computedWidth = Math.max(rect.width, (tMax - tMin) * pixelsPerStep + padding.left + padding.right);
+
+    const plotW = computedWidth - padding.left - padding.right;
     const plotH = rect.height - padding.top - padding.bottom;
     const xForT = (t) => padding.left + ((t - tMin) / (tMax - tMin)) * plotW;
     const yForFreq = (f) => padding.top + (1 - (f - minFreq) / (maxFreq - minFreq)) * plotH;
@@ -215,10 +256,15 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
           <LegendDot color={COLORS.miss} label="Miss" />
           <LegendDot color={COLORS.falseAlarm} label="False alarm" />
           <LegendDiamond color={COLORS.predicted} label="Predicted" />
+          <Toggle 
+            checked={showTruth} 
+            onChange={setShowTruth} 
+            label="Emitter Truth" 
+          />
         </div>
       </div>
 
-      <div ref={containerRef} style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+      <div ref={containerRef} style={{ position: 'relative', flex: 1, minHeight: 0, overflowX: 'auto', overflowY: 'hidden' }}>
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}
@@ -229,7 +275,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
           <div
             style={{
               position: 'absolute',
-              left: Math.min(hover.mx + 12, size.width - 130),
+              left: Math.min(hover.mx + 12, Math.max(size.width, canvasRef.current.width / (window.devicePixelRatio || 1)) - 130),
               top: Math.max(hover.my - 46, 0),
               background: 'var(--text-primary)',
               color: '#fff',
@@ -275,5 +321,34 @@ function LegendDiamond({ color, label }) {
       />
       {label}
     </span>
+  );
+}
+
+function Toggle({ checked, onChange, label }) {
+  return (
+    <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', marginLeft: 8 }}>
+      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ display: 'none' }} />
+      <div style={{
+        position: 'relative',
+        width: 32,
+        height: 18,
+        borderRadius: 18,
+        background: checked ? 'var(--blue)' : 'var(--border-strong)',
+        transition: 'background 0.2s'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 2,
+          left: checked ? 16 : 2,
+          width: 14,
+          height: 14,
+          borderRadius: '50%',
+          background: '#fff',
+          transition: 'left 0.2s',
+          boxShadow: 'var(--shadow-sm)'
+        }} />
+      </div>
+      {label && <span style={{ color: checked ? 'var(--text-primary)' : 'var(--text-secondary)' }}>{label}</span>}
+    </label>
   );
 }

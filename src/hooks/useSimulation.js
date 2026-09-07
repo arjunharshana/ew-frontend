@@ -11,7 +11,7 @@ import {
 } from '../utils/demoData.js';
 import { confidenceLabel as computeConfidenceLabel } from '../utils/formatters.js';
 
-const HISTORY_WINDOW = 70;
+const HISTORY_WINDOW = 500;
 const RECENT_SCANS_WINDOW = 7;
 
 /**
@@ -44,10 +44,22 @@ function telemetryToState(telemetry, prevState) {
   const step = sys?.step ?? prevState.timestep;
   const alreadyRecorded = prevState.scanHistory?.length > 0 && prevState.scanHistory[prevState.scanHistory.length - 1]?.t === step;
 
+  const events = telemetry.waterfall_events || [];
+  // The ML API might send an array where the latest is at the end. Find the matching step.
+  const matchedWaterfall = events.find(e => e.step === step) || events[events.length - 1];
+  const groundTruth = matchedWaterfall?.ground_truth || [];
+
   const baseHistory = prevState.source === 'demo' ? [] : (prevState.scanHistory ?? []);
-  const scanHistory = alreadyRecorded
-    ? prevState.scanHistory
-    : [...baseHistory, { t: step, freq: currentFreq, result }].slice(-HISTORY_WINDOW);
+  let scanHistory;
+  if (alreadyRecorded) {
+    scanHistory = [...prevState.scanHistory];
+    scanHistory[scanHistory.length - 1] = {
+      ...scanHistory[scanHistory.length - 1],
+      groundTruth: groundTruth.length > 0 ? groundTruth : scanHistory[scanHistory.length - 1].groundTruth
+    };
+  } else {
+    scanHistory = [...baseHistory, { t: step, freq: currentFreq, result, groundTruth }].slice(-HISTORY_WINDOW);
+  }
 
   const baseRecent = prevState.source === 'demo' ? [] : (prevState.recentScans ?? []);
   const recentScans = alreadyRecorded
@@ -304,7 +316,7 @@ export function useSimulation() {
   }, [applyTelemetry]);
 
   const actions = {
-    start: async () => {
+    start: async (initialSpeed = '1x', seed = 42) => {
       if (sessionIdRef.current) {
         const res = await api.resumeSession(sessionIdRef.current);
         if (res) {
@@ -313,13 +325,14 @@ export function useSimulation() {
         }
       }
       const schedulerName = selectedSchedulerId;
-      const session = await api.startSession(scenario, schedulerName);
+      const session = await api.startSession(scenario, schedulerName, seed);
       if (session) {
         sessionIdRef.current = session.sessionId;
         setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
         setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
         setRunning(true);
         setIsDemo(false);
+        await api.setSpeed(session.sessionId, initialSpeed);
       } else {
         setIsDemo(true);
       }
@@ -350,22 +363,33 @@ export function useSimulation() {
       const telemetry = await api.stepSession(sessionIdRef.current, 1);
       if (telemetry) applyTelemetry(telemetry);
     },
-    restart: async (newScenario, newScheduler) => {
+    restart: async (newScenario, newScheduler, seed, initialSpeed = '1x', wasRunning = true) => {
       setRunning(false);
       if (sessionIdRef.current) {
         await api.completeSession(sessionIdRef.current);
         sessionIdRef.current = null;
       }
-      const session = await api.startSession(newScenario, newScheduler);
+      const session = await api.startSession(newScenario, newScheduler, seed);
       if (session) {
         sessionIdRef.current = session.sessionId;
         setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
         setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
-        setRunning(true);
         setIsDemo(false);
+        await api.setSpeed(session.sessionId, initialSpeed);
+        
+        if (wasRunning) {
+          setRunning(true);
+        } else {
+          // Keep it paused if it wasn't running
+          await api.pauseSession(session.sessionId);
+        }
       } else {
         setIsDemo(true);
       }
+    },
+    setSpeed: async (speed) => {
+      if (!sessionIdRef.current) return;
+      await api.setSpeed(sessionIdRef.current, speed);
     },
   };
 

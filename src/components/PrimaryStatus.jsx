@@ -1,4 +1,5 @@
 import { formatMHz, formatPercent } from '../utils/formatters.js';
+import ScanTimeline from './ScanTimeline.jsx';
 
 function ConfidenceRing({ confidence }) {
   const size = 46;
@@ -104,14 +105,29 @@ export default function PrimaryStatus({ state }) {
           paddingLeft: 32,
           marginLeft: 'auto',
           display: 'flex',
-          flexDirection: 'column',
-          gap: 4
+          gap: 32,
+          alignItems: 'center'
         }}
       >
-        <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Active Scenario</span>
-        <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-primary)' }}>
-          {state.activeScenario?.replace(/_/g, ' ') ?? 'Unknown'}
-        </span>
+        <StatusBlock
+          label="Total steps"
+          value={state.timestep ?? 0}
+          sub="Executed"
+        />
+        <StatusBlock
+          label="Time elapsed"
+          value={`${state.simulationTimeS ? state.simulationTimeS.toFixed(1) : ((state.timestep ?? 0) * 0.1).toFixed(1)} s`}
+          sub="Real-time"
+        />
+      </div>
+
+      <div
+        style={{
+          borderLeft: '1px solid var(--border)',
+          paddingLeft: 32,
+        }}
+      >
+        <ScanTimeline recentScans={state.recentScans} />
       </div>
     </section>
   );
