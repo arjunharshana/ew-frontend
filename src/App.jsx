@@ -52,15 +52,16 @@ export default function App() {
           flexDirection: 'column',
           gap: 14,
           padding: '14px 28px',
-          overflow: 'hidden',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
         {/* Main visualization + decision panel */}
-        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 0, display: 'flex', gap: 14 }}>
+        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 350, display: 'flex', gap: 14 }}>
           {/* Main Panel */}
-          <div style={{ flex: '1 1 68%', minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ flex: '1 1 68%', minWidth: 0, minHeight: 350, display: 'flex', flexDirection: 'column', gap: 14 }}>
             <TacticalSpectrumStrip state={sim.state} />
-            <div style={{ ...card, flex: '1 1 auto', minHeight: 0, padding: 18 }}>
+            <div style={{ ...card, flex: '1 1 auto', minHeight: 200, padding: 18 }}>
               <FrequencyActivity
                 scanHistory={sim.state.scanHistory}
                 predictedFrequency={sim.state.predictedFrequency}
