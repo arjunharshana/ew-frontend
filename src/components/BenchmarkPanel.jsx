@@ -1,8 +1,9 @@
 const MODEL_COLORS = {
-  'V4.1 LSTM-Hybrid': '#2563EB',
-  'Context-Aware': '#94A3B8',
-  'V3.1 DDQN': '#D97706',
-  'V4.0 Hybrid': '#16A34A',
+  'V4.0 Hybrid': '#10B981',     // Green
+  'Whittle W3': '#3B82F6',      // Blue
+  'Context-Aware': '#F59E0B',   // Orange/Yellow
+  'V4.1 LSTM': '#8B5CF6',       // Purple
+  'V5.0 Belief': '#64748B',     // Slate/Gray
 };
 
 function ScenarioBars({ scenario }) {

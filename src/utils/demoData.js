@@ -100,24 +100,36 @@ export const demoBenchmarks = {
   scenarios: [
     {
       name: 'Seen Structure',
-      values: { 'V4.1 LSTM-Hybrid': 80.0, 'Context-Aware': 26.9, 'V3.1 DDQN': 49.6, 'V4.0 Hybrid': 49.1 },
+      values: { 'V4.0 Hybrid': 50.62, 'Whittle W3': 48.33, 'Context-Aware': 26.90, 'V4.1 LSTM': 46.10, 'V5.0 Belief': 24.33 }
     },
     {
       name: 'Unseen Permutation',
-      values: { 'V4.1 LSTM-Hybrid': 82.3, 'Context-Aware': 31.4, 'V3.1 DDQN': 50.1, 'V4.0 Hybrid': 44.6 },
+      values: { 'V4.0 Hybrid': 40.48, 'Whittle W3': 38.67, 'Context-Aware': 31.40, 'V4.1 LSTM': 32.20, 'V5.0 Belief': 21.00 }
     },
     {
       name: 'Unseen Phase',
-      values: { 'V4.1 LSTM-Hybrid': 84.7, 'Context-Aware': 30.4, 'V3.1 DDQN': 50.3, 'V4.0 Hybrid': 43.8 },
+      values: { 'V4.0 Hybrid': 45.70, 'Whittle W3': 42.67, 'Context-Aware': 30.40, 'V4.1 LSTM': 35.80, 'V5.0 Belief': 22.33 }
+    },
+    {
+      name: 'Unseen Dwell',
+      values: { 'V4.0 Hybrid': 18.25, 'Whittle W3': 16.50, 'Context-Aware': 24.53, 'V4.1 LSTM': 12.40, 'V5.0 Belief': 9.33 }
     },
     {
       name: 'Unseen Subset',
-      values: { 'V4.1 LSTM-Hybrid': 24.3, 'Context-Aware': 27.4, 'V3.1 DDQN': 2.9, 'V4.0 Hybrid': 22.3 },
+      values: { 'V4.0 Hybrid': 31.20, 'Whittle W3': 31.00, 'Context-Aware': 31.20, 'V4.1 LSTM': 22.50, 'V5.0 Belief': 14.00 }
+    },
+    {
+      name: 'Mixed Frequency Shift',
+      values: { 'V4.0 Hybrid': 33.60, 'Whittle W3': 32.50, 'Context-Aware': 33.60, 'V4.1 LSTM': 21.80, 'V5.0 Belief': 13.67 }
+    },
+    {
+      name: 'Pseudo-Random Hopping',
+      values: { 'V4.0 Hybrid': 33.40, 'Whittle W3': 35.20, 'Context-Aware': 35.50, 'V4.1 LSTM': 21.00, 'V5.0 Belief': 9.00 }
     },
     {
       name: 'Periodic Burst',
-      values: { 'V4.1 LSTM-Hybrid': 68.8, 'Context-Aware': 51.3, 'V3.1 DDQN': 16.7, 'V4.0 Hybrid': 78.5 },
-    },
+      values: { 'V4.0 Hybrid': 28.30, 'Whittle W3': 30.30, 'Context-Aware': 35.70, 'V4.1 LSTM': 23.40, 'V5.0 Belief': 9.20 }
+    }
   ],
 };
 
