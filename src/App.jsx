@@ -71,7 +71,7 @@ export default function App() {
         </div>
 
         {/* Performance */}
-        <div style={{ flex: '0 0 auto', display: 'flex', gap: 14, height: '26%', minHeight: 130 }}>
+        <div style={{ flex: '0 0 auto', display: 'flex', gap: 14, minHeight: 200 }}>
           <div style={{ ...card, flex: '1 1 38%', padding: '16px 22px', minHeight: 0 }}>
             <PerformancePanel metrics={sim.metrics} />
           </div>

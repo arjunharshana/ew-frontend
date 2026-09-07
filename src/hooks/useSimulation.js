@@ -111,6 +111,7 @@ function lookupQValue(pred, fallback) {
 function telemetryToMetrics(telemetry, prevMetrics) {
   const perf = telemetry.performance;
   const arb = telemetry.arbitration;
+  const outcome = telemetry.outcome;
   if (!perf) return prevMetrics;
 
   const step = telemetry.system_status?.step ?? prevMetrics.totalScans;
@@ -143,10 +144,11 @@ function telemetryToMetrics(telemetry, prevMetrics) {
     detectionProbability: perf.detection_rate_pct / 100,
     // Not directly provided by telemetry.performance - retained from prior
     // value (or demo fallback) until/unless the ML API exposes it.
-    predictionAccuracy: prevMetrics.predictionAccuracy,
-    averageInterceptTime: prevMetrics.averageInterceptTime,
-    averageReward: prevMetrics.averageReward,
-    falseAlarmProbability: prevMetrics.falseAlarmProbability,
+    predictionAccuracy: perf.prediction_accuracy ?? prevMetrics.predictionAccuracy,
+    averageInterceptTime: perf.average_intercept_time ?? prevMetrics.averageInterceptTime,
+    averageReward: perf.average_reward ?? outcome?.reward ?? prevMetrics.averageReward,
+    falseAlarmProbability: telemetry.detector?.pfa ?? prevMetrics.falseAlarmProbability,
+    sensitivityDbm: telemetry.detector?.sensitivity_dbm ?? prevMetrics.sensitivityDbm ?? -90,
     totalScans: perf.total_scans,
     uniqueEmittersDetected: prevMetrics.uniqueEmittersDetected,
     timeToFirstIntercept: prevMetrics.timeToFirstIntercept,
@@ -284,14 +286,20 @@ export function useSimulation() {
       const activeSession = Array.isArray(sessions)
         ? sessions.find((s) => s.status === 'running' || s.status === 'paused')
         : null;
+      // If there is any lingering session from a previous page, clean it up so the UI starts fresh.
       if (activeSession) {
-        sessionIdRef.current = activeSession.sessionId;
-        setRunning(activeSession.status === 'running');
+        // End the session to avoid stuck paused state.
+        await api.completeSession(activeSession.sessionId);
+        sessionIdRef.current = null;
+        setRunning(false);
+        // Clear accumulated UI state.
+        setState((prev) => ({ ...prev, scanHistory: [], recentScans: [] }));
+        setMetrics((prev) => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
       }
 
-      if (telemetry) {
-        applyTelemetry(telemetry);
-      }
+      // Do NOT apply stale telemetry; start from a clean slate.
+      // If you need an initial snapshot, it will be received after the new session starts.
+
     })();
   }, [applyTelemetry]);
 
