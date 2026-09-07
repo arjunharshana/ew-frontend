@@ -57,9 +57,9 @@ export default function App() {
         }}
       >
         {/* Main visualization + decision panel */}
-        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 350, display: 'flex', gap: 14 }}>
+        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 350, display: 'flex', flexWrap: 'wrap', gap: 14 }}>
           {/* Main Panel */}
-          <div style={{ flex: '1 1 68%', minWidth: 0, minHeight: 350, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ flex: '1 1 68%', minWidth: 600, minHeight: 350, display: 'flex', flexDirection: 'column', gap: 14 }}>
             <TacticalSpectrumStrip state={sim.state} />
             <div style={{ ...card, flex: '1 1 auto', minHeight: 200, padding: 18 }}>
               <FrequencyActivity
@@ -70,7 +70,7 @@ export default function App() {
             </div>
           </div>
           {/* Sidebar Controls */}
-          <div style={{ ...card, flex: '0 0 280px', minHeight: 0, padding: 22 }}>
+          <div style={{ ...card, flex: '1 1 280px', minWidth: 280, minHeight: 0, padding: 22 }}>
             <SimulationControls
               running={sim.running}
               scenario={sim.scenario}
@@ -85,7 +85,7 @@ export default function App() {
         </div>
 
         {/* Performance */}
-        <div style={{ flex: '0 0 auto', display: 'flex', gap: 14, minHeight: 200 }}>
+        <div style={{ flex: '0 0 auto', display: 'flex', flexWrap: 'wrap', gap: 14, minHeight: 200 }}>
           <div style={{ ...card, flex: '1 1 38%', padding: '16px 22px', minHeight: 0 }}>
             <PerformancePanel metrics={sim.metrics} />
           </div>
