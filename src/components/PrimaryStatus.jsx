@@ -2,8 +2,8 @@ import { formatMHz, formatPercent } from '../utils/formatters.js';
 import ScanTimeline from './ScanTimeline.jsx';
 
 function ConfidenceRing({ confidence }) {
-  const size = 46;
-  const stroke = 4;
+  const size = 52;
+  const stroke = 5;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(1, confidence ?? 0));
@@ -35,15 +35,15 @@ function ConfidenceRing({ confidence }) {
 
 function StatusBlock({ label, value, sub, accent }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{label}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</span>
       <span
         className="mono"
-        style={{ fontSize: 30, fontWeight: 600, color: accent ?? 'var(--text-primary)', lineHeight: 1.1 }}
+        style={{ fontSize: 32, fontWeight: 700, color: accent ?? 'var(--text-primary)', lineHeight: 1.1, textShadow: accent ? `0 2px 12px ${accent}40` : 'none' }}
       >
         {value}
       </span>
-      <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{sub}</span>
+      <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-muted)' }}>{sub}</span>
     </div>
   );
 }
@@ -53,17 +53,18 @@ export default function PrimaryStatus({ state }) {
     <section
       style={{
         display: 'flex',
-        gap: 48,
-        padding: '20px 28px',
-        background: 'var(--bg-surface)',
+        gap: 32,
+        padding: '12px 24px',
+        background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
         borderBottom: '1px solid var(--border)',
+        boxShadow: 'var(--shadow-sm)',
         alignItems: 'center',
       }}
     >
       <div
         style={{
-          borderLeft: '3px solid var(--blue)',
-          paddingLeft: 16,
+          borderLeft: '4px solid var(--blue)',
+          paddingLeft: 20,
         }}
       >
         <StatusBlock
@@ -76,8 +77,8 @@ export default function PrimaryStatus({ state }) {
 
       <div
         style={{
-          borderLeft: '3px solid var(--amber)',
-          paddingLeft: 16,
+          borderLeft: '4px solid var(--amber)',
+          paddingLeft: 20,
         }}
       >
         <StatusBlock
@@ -90,12 +91,12 @@ export default function PrimaryStatus({ state }) {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
         <ConfidenceRing confidence={state.confidence} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Confidence</span>
-          <span className="mono" style={{ fontSize: 30, fontWeight: 600, lineHeight: 1.1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Confidence</span>
+          <span className="mono" style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.1, color: 'var(--amber)', textShadow: '0 2px 12px var(--amber-light)' }}>
             {formatPercent(state.confidence)}
           </span>
-          <span style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{state.confidenceLabel}</span>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-muted)' }}>{state.confidenceLabel}</span>
         </div>
       </div>
 

@@ -214,8 +214,37 @@ export function useSimulation() {
   const [schedulerOptions, setSchedulerOptions] = useState([]);
   const [selectedSchedulerId, setSelectedSchedulerId] = useState('hybrid_v4');
   const [benchmarks, setBenchmarks] = useState(demoBenchmarks);
+  const [realTimeElapsed, setRealTimeElapsed] = useState(0);
+  const lastTickRef = useRef(null);
   const sessionIdRef = useRef(null);
   const bootstrapped = useRef(false);
+
+  useEffect(() => {
+    let animationFrameId;
+    
+    const updateTime = () => {
+      if (running && sessionIdRef.current) {
+        const now = performance.now();
+        if (lastTickRef.current) {
+          const delta = (now - lastTickRef.current) / 1000;
+          setRealTimeElapsed(prev => prev + delta);
+        }
+        lastTickRef.current = now;
+      }
+      animationFrameId = requestAnimationFrame(updateTime);
+    };
+    
+    if (running) {
+      lastTickRef.current = performance.now();
+      animationFrameId = requestAnimationFrame(updateTime);
+    } else {
+      lastTickRef.current = null;
+    }
+    
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
+  }, [running]);
 
   // Applies one telemetry payload (from WS relay or a manual step response)
   // to all the derived state slices.
@@ -307,6 +336,7 @@ export function useSimulation() {
         // Clear accumulated UI state.
         setState((prev) => ({ ...prev, scanHistory: [], recentScans: [] }));
         setMetrics((prev) => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+        setRealTimeElapsed(0);
       }
 
       // Do NOT apply stale telemetry; start from a clean slate.
@@ -330,6 +360,7 @@ export function useSimulation() {
         sessionIdRef.current = session.sessionId;
         setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
         setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+        setRealTimeElapsed(0);
         setRunning(true);
         setIsDemo(false);
         await api.setSpeed(session.sessionId, initialSpeed);
@@ -353,6 +384,7 @@ export function useSimulation() {
       }
       setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
       setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+      setRealTimeElapsed(0);
       if (isDemo) {
         setState(demoState);
         setMetrics(demoMetrics);
@@ -374,6 +406,7 @@ export function useSimulation() {
         sessionIdRef.current = session.sessionId;
         setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
         setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+        setRealTimeElapsed(0);
         setIsDemo(false);
         await api.setSpeed(session.sessionId, initialSpeed);
         
@@ -397,7 +430,7 @@ export function useSimulation() {
     connectionStatus: status,
     isDemo,
     running,
-    state,
+    state: { ...state, simulationTimeS: isDemo ? state.simulationTimeS : realTimeElapsed },
     metrics,
     emitters,
     receiver,

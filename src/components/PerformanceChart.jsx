@@ -3,9 +3,12 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 export default function PerformanceChart({ data }) {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', marginBottom: 6, display: 'block' }}>
-        Interception rate over time
-      </span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h2 style={{ fontSize: 14.5, fontWeight: 600, margin: 0 }}>Interception Rate Over Time</h2>
+        <span style={{ fontSize: 11, color: 'var(--text-secondary)', background: 'var(--bg-surface-secondary)', padding: '2px 8px', borderRadius: 12 }}>
+          Rolling Average
+        </span>
+      </div>
       <div style={{ flex: 1, minHeight: 0 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>

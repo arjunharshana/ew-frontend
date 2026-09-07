@@ -22,28 +22,28 @@ export default function TacticalSpectrumStrip({ state }) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 18 }}>📡</span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          <span style={{ fontSize: 20 }}>📡</span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
             TACTICAL SPECTRUM STRIP ({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz • 20 MHz IBW)
           </span>
         </div>
         
         {/* Legends */}
         <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'var(--text-secondary)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 12, height: 12, background: 'var(--cyan)', borderRadius: 2 }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+            <div style={{ width: 14, height: 14, background: 'var(--blue)', borderRadius: 3, boxShadow: '0 0 6px rgba(59, 130, 246, 0.5)' }}></div>
             Tuned Channel
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 12, height: 12, border: '1px dashed var(--amber)', borderRadius: 2 }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+            <div style={{ width: 14, height: 14, border: '2px dashed var(--amber)', borderRadius: 3 }}></div>
             Next Target
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 12, height: 12, background: 'var(--green)', borderRadius: 2 }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+            <div style={{ width: 14, height: 14, background: 'var(--green)', borderRadius: 3, boxShadow: '0 0 6px rgba(16, 185, 129, 0.5)' }}></div>
             Signal Hit
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <div style={{ width: 12, height: 12, background: 'var(--red)', borderRadius: 2 }}></div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+            <div style={{ width: 14, height: 14, background: 'var(--red)', borderRadius: 3, boxShadow: '0 0 6px rgba(239, 68, 68, 0.5)' }}></div>
             Emitter Truth
           </div>
         </div>
@@ -52,8 +52,8 @@ export default function TacticalSpectrumStrip({ state }) {
       {/* Strip */}
       <div style={{
         display: 'flex',
-        gap: 6,
-        overflowX: 'auto',
+        gap: 4,
+        overflowX: 'hidden',
         paddingBottom: 8
       }}>
         {bands.map((freq, i) => {
@@ -71,13 +71,13 @@ export default function TacticalSpectrumStrip({ state }) {
           let numColor = 'var(--text-muted)';
           
           if (isHit) {
-            bg = 'rgba(34, 197, 94, 0.25)'; // stronger green tint
+            bg = 'rgba(16, 185, 129, 0.15)';
             border = '2px solid var(--green)';
             numColor = 'var(--green)';
           } else if (isTuned) {
-            bg = 'rgba(6, 182, 212, 0.25)'; // stronger cyan tint
-            border = '2px solid var(--cyan)';
-            numColor = 'var(--cyan)';
+            bg = 'rgba(59, 130, 246, 0.15)';
+            border = '2px solid var(--blue)';
+            numColor = 'var(--blue)';
           }
           
           // Next target outline overlaps the existing background
@@ -89,8 +89,9 @@ export default function TacticalSpectrumStrip({ state }) {
           return (
             <div key={i} style={{
               boxSizing: 'border-box',
-              minWidth: 46,
-              height: 48,
+              flex: 1,
+              minWidth: 0,
+              height: 52,
               border,
               background: bg,
               borderRadius: 4,
@@ -98,24 +99,24 @@ export default function TacticalSpectrumStrip({ state }) {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: 4,
+              gap: 2,
               position: 'relative',
-              flexShrink: 0
+              boxShadow: isHit ? '0 0 12px rgba(16, 185, 129, 0.2)' : (isTuned ? '0 0 12px rgba(59, 130, 246, 0.2)' : 'none')
             }}>
-              <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>B{i}</span>
-              <span className="mono" style={{ fontSize: 13, fontWeight: 600, color: numColor }}>{freq}</span>
+              <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--text-secondary)' }}>B{i}</span>
+              <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: numColor, letterSpacing: -0.5 }}>{freq}</span>
               
               {/* Emitter Truth Dot */}
               {isTruth && (
                 <div style={{
                   position: 'absolute',
-                  top: -4,
-                  right: -4,
-                  width: 8,
-                  height: 8,
+                  top: -6,
+                  right: -6,
+                  width: 12,
+                  height: 12,
                   background: 'var(--red)',
                   borderRadius: '50%',
-                  boxShadow: '0 0 0 2px var(--bg-surface)'
+                  boxShadow: '0 0 0 3px var(--bg-surface), 0 0 8px rgba(239, 68, 68, 0.8)'
                 }} />
               )}
             </div>

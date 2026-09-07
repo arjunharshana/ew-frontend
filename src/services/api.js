@@ -7,7 +7,7 @@
 // Every function returns null on failure instead of throwing, so callers
 // can fall back to demo data without wrapping every call in try/catch.
 
-const BASE = '';
+const BASE = import.meta.env.VITE_API_BASE_URL || '';
 
 async function getJSON(path) {
   try {
@@ -63,6 +63,12 @@ export const api = {
 };
 
 export function wsURL() {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    // Replace http(s) with ws(s)
+    return import.meta.env.VITE_API_BASE_URL.replace(/^http/, 'ws') + '/ws';
+  }
+  
+  // Fallback for local proxy dev mode
   const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
   // Our backend's relay socket - NOT the ML API's /ws/telemetry directly.
   return `${proto}//${window.location.host}/ws`;

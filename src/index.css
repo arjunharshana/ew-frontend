@@ -1,33 +1,46 @@
 :root {
-  --bg-page: #F5F7FA;
+  --bg-page: #F8FAFC;
   --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F8FAFC;
+  --bg-surface-secondary: #F1F5F9;
   --border: #E2E8F0;
-  --border-strong: #CBD5E1;
+  --border-strong: #94A3B8;
 
-  --text-primary: #172033;
-  --text-secondary: #64748B;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
   --text-muted: #94A3B8;
 
-  --blue: #2563EB;
-  --blue-light: #DBEAFE;
-  --amber: #D97706;
-  --amber-light: #FEF3C7;
-  --green: #16A34A;
-  --green-light: #DCFCE7;
-  --red: #DC2626;
-  --red-light: #FEE2E2;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --amber: #F59E0B;
+  --amber-light: #FFFBEB;
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --purple: #8B5CF6;
   --muted: #94A3B8;
 
-  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ui: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
 
-  --shadow-sm: 0 1px 2px rgba(23, 32, 51, 0.04);
-  --shadow-md: 0 2px 8px rgba(23, 32, 51, 0.06);
+  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.02);
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(0.95); }
 }
 
 * {
@@ -41,7 +54,8 @@ html, body, #root {
 body {
   margin: 0;
   font-family: var(--font-ui);
-  background: var(--bg-page);
+  background: linear-gradient(135deg, #f4f7ff 0%, #f9f5ff 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'tnum' 1;
@@ -85,3 +99,8 @@ button {
   border-bottom: 1px dotted var(--text-muted);
   cursor: help;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

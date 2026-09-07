@@ -2,19 +2,15 @@
 // Structure intentionally mirrors what the real backend returns so that
 // components never need to know whether they're looking at live or demo data.
 
-const FREQ_BINS = [
-  { bin: 1, freq: 150 },
-  { bin: 4, freq: 250 },
-  { bin: 7, freq: 350 },
-  { bin: 10, freq: 450 },
-  { bin: 13, freq: 550 },
-  { bin: 16, freq: 650 },
-];
+const FREQ_BINS = Array.from({ length: 30 }, (_, i) => ({
+  bin: i,
+  freq: 110 + i * 20,
+}));
 
 function makeScanHistory(steps = 40) {
   const history = [];
   let t = 0;
-  const seq = [150, 250, 350, 450, 550, 650, 150, 250, 350, 450];
+  const seq = [230, 290, 450, 610, 510, 190, 310, 450, 590, 630];
   for (let i = 0; i < steps; i++) {
     const freq = seq[i % seq.length];
     const outcomes = ['hit', 'hit', 'hit', 'miss', 'hit', 'hit', 'false_alarm'];
@@ -29,10 +25,10 @@ export const demoScanHistory = makeScanHistory(70);
 export const demoState = {
   source: 'demo',
   timestep: 342,
-  currentFrequency: 350,
-  currentBin: 10,
-  predictedFrequency: 450,
-  predictedBin: 14,
+  currentFrequency: 450,
+  currentBin: 17,
+  predictedFrequency: 610,
+  predictedBin: 25,
   confidence: 0.88,
   confidenceLabel: 'High confidence',
   pattern: 'Hopping',
@@ -44,15 +40,15 @@ export const demoState = {
   scanHistory: demoScanHistory,
   activeScenario: '1_Seen_Structure',
   recentScans: [
-    { freq: 250, result: 'hit' },
-    { freq: 350, result: 'hit' },
+    { freq: 230, result: 'hit' },
+    { freq: 290, result: 'hit' },
     { freq: 450, result: 'hit' },
-    { freq: 550, result: 'miss' },
-    { freq: 650, result: 'hit' },
-    { freq: 150, result: 'hit' },
-    { freq: 250, result: 'hit' },
+    { freq: 610, result: 'miss' },
+    { freq: 510, result: 'hit' },
+    { freq: 190, result: 'hit' },
+    { freq: 310, result: 'hit' },
   ],
-  bandsMhz: [150, 250, 350, 450, 550, 650],
+  bandsMhz: Array.from({ length: 30 }, (_, i) => 110 + i * 20),
 };
 
 export const demoMetrics = {
@@ -94,7 +90,7 @@ export const demoReceiver = {
 export const demoScheduler = {
   version: 'V4.1 LSTM-Hybrid',
   decisionMode: 'LSTM exploit',
-  qValues: { 150: 0.4, 250: 0.8, 350: 1.1, 450: 2.31, 550: 0.6, 650: 0.9 },
+  qValues: { 230: 0.4, 290: 0.8, 310: 1.1, 450: 2.31, 510: 0.6, 610: 0.9 },
   confidence: 0.88,
   hiddenStateEnergy: 4.82,
   cellStateEnergy: 3.14,

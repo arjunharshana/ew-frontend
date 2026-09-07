@@ -89,14 +89,14 @@ export default function SimulationControls({ running, scenario, setScenario, sce
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 'auto' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16 }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           {!running ? (
             <Button primary onClick={() => actions.start(speed.replace('×', 'x'))}>▶ Start</Button>
           ) : (
             <Button onClick={actions.pause}>⏸ Pause</Button>
           )}
-          <Button onClick={actions.reset}>🔄 Reset</Button>
+          <Button onClick={actions.reset}>↺ Reset</Button>
           <Button onClick={actions.stop}>⏹ Stop</Button>
           <Button onClick={actions.step}>⏭ Step</Button>
         </div>

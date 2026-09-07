@@ -94,22 +94,10 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
       ctx.stroke();
     });
 
-    // axis labels (frequency)
-    ctx.fillStyle = COLORS.axisText;
-    ctx.font = '11px Inter, system-ui, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    freqValues.forEach((f, i) => {
-      if (i % labelStep !== 0 && i !== freqValues.length - 1 && i !== 0) return;
-      const y = yForFreq(f);
-      ctx.fillText(`${f}`, padding.left - 10, y);
-    });
-
     // baseline axis
     ctx.strokeStyle = COLORS.axis;
     ctx.beginPath();
-    ctx.moveTo(padding.left, padding.top);
-    ctx.lineTo(padding.left, height - padding.bottom);
+    ctx.moveTo(padding.left, height - padding.bottom);
     ctx.lineTo(computedWidth - padding.right, height - padding.bottom);
     ctx.stroke();
 
@@ -124,8 +112,11 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
               const y = yForFreq(emitter.frequency_mhz);
               ctx.beginPath();
               // small distinct marker
-              ctx.arc(x, y, 2.0, 0, Math.PI * 2);
+              ctx.arc(x, y, 4.0, 0, Math.PI * 2);
+              ctx.shadowColor = COLORS.truth;
+              ctx.shadowBlur = 6;
               ctx.fill();
+              ctx.shadowBlur = 0;
             });
           }
         });
@@ -133,7 +124,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
 
       // trajectory line
       ctx.strokeStyle = COLORS.trajectory;
-      ctx.lineWidth = 1.25;
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
       history.forEach((pt, i) => {
         const x = xForT(pt.t);
@@ -150,9 +141,17 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         const color =
           pt.result === 'hit' ? COLORS.hit : pt.result === 'false_alarm' ? COLORS.falseAlarm : COLORS.miss;
         ctx.beginPath();
-        ctx.arc(x, y, pt.result === 'hit' ? 3.5 : 2.5, 0, Math.PI * 2);
+        ctx.arc(x, y, pt.result === 'hit' ? 6 : 4.5, 0, Math.PI * 2);
         ctx.fillStyle = color;
+        if (pt.result === 'hit') {
+          ctx.shadowColor = COLORS.hit;
+          ctx.shadowBlur = 8;
+        } else if (pt.result === 'false_alarm') {
+          ctx.shadowColor = COLORS.falseAlarm;
+          ctx.shadowBlur = 6;
+        }
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
 
       // predicted next marker — placed one step ahead of the last scan
@@ -161,20 +160,23 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         const x = xForT(lastT + 1);
         const y = yForFreq(predictedFrequency);
         ctx.beginPath();
-        ctx.moveTo(x, y - 5);
-        ctx.lineTo(x + 5, y);
-        ctx.lineTo(x, y + 5);
-        ctx.lineTo(x - 5, y);
+        ctx.moveTo(x, y - 7);
+        ctx.lineTo(x + 7, y);
+        ctx.lineTo(x, y + 7);
+        ctx.lineTo(x - 7, y);
         ctx.closePath();
         ctx.fillStyle = COLORS.predicted;
+        ctx.shadowColor = COLORS.predicted;
+        ctx.shadowBlur = 10;
         ctx.fill();
+        ctx.shadowBlur = 0;
 
         // dashed connector from last actual point to prediction
         const lastX = xForT(lastT);
         const lastY = yForFreq(history[history.length - 1].freq);
-        ctx.setLineDash([3, 3]);
+        ctx.setLineDash([4, 4]);
         ctx.strokeStyle = COLORS.predicted;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(x, y);
@@ -264,7 +266,25 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         </div>
       </div>
 
-      <div ref={containerRef} style={{ position: 'relative', flex: 1, minHeight: 0, overflowX: 'auto', overflowY: 'hidden' }}>
+      <div style={{ position: 'relative', flex: 1, minHeight: 0, display: 'flex' }}>
+        
+        {/* Fixed Y-Axis Overlay */}
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: padding.left, background: 'var(--bg-surface)', borderRight: '1px solid var(--border)', pointerEvents: 'none', zIndex: 10 }}>
+          {freqValues.map((f, i) => {
+            const labelStep = Math.max(1, Math.ceil(freqValues.length / 8));
+            if (i % labelStep !== 0 && i !== freqValues.length - 1 && i !== 0) return null;
+            const plotH = size.height - padding.top - padding.bottom;
+            const y = padding.top + (1 - (f - minFreq) / (maxFreq - minFreq)) * plotH;
+            return (
+              <span key={f} style={{ position: 'absolute', right: 10, top: y, transform: 'translateY(-50%)', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)' }}>
+                {f}
+              </span>
+            );
+          })}
+        </div>
+
+        {/* Scrollable Container */}
+        <div ref={containerRef} className="hide-scrollbar" style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}
@@ -294,14 +314,15 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 }
 
 function LegendDot({ color, label }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-      <span style={{ width: 6, height: 6, borderRadius: '50%', background: color, display: 'inline-block' }} />
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+      <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, display: 'inline-block', boxShadow: `0 0 6px ${color}80` }} />
       {label}
     </span>
   );
@@ -309,14 +330,15 @@ function LegendDot({ color, label }) {
 
 function LegendDiamond({ color, label }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
       <span
         style={{
-          width: 7,
-          height: 7,
+          width: 10,
+          height: 10,
           background: color,
           display: 'inline-block',
           transform: 'rotate(45deg)',
+          boxShadow: `0 0 6px ${color}80`
         }}
       />
       {label}
