@@ -117,8 +117,8 @@ export default function PrimaryStatus({ state }) {
         />
         <StatusBlock
           label="Time elapsed"
-          value={`${state.simulationTimeS ? state.simulationTimeS.toFixed(1) : ((state.timestep ?? 0) * 0.1).toFixed(1)} s`}
-          sub="Real-time"
+          value={`${((state.timestep ?? 0) * 0.01).toFixed(2)} s`}
+          sub="Simulated (10ms/step)"
         />
       </div>
 

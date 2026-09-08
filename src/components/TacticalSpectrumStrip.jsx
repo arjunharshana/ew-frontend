@@ -1,8 +1,8 @@
 import React from 'react';
 
 export default function TacticalSpectrumStrip({ state }) {
-  // If bandsMhz is not available, we can mock it based on the screenshot (110 to 690 step 20)
-  const bands = state.bandsMhz && state.bandsMhz.length > 0 ? state.bandsMhz : Array.from({ length: 30 }, (_, i) => 110 + i * 20);
+  // Hardcoded to 110 to 690 MHz as requested
+  const bands = Array.from({ length: 30 }, (_, i) => 110 + i * 20);
 
   // Get the most recent scan to determine if there was a hit
   const lastScan = state.scanHistory && state.scanHistory.length > 0 
