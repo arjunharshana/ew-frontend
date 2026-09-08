@@ -118,7 +118,6 @@ export default function PrimaryStatus({ state }) {
         <StatusBlock
           label="Time elapsed"
           value={`${((state.timestep ?? 0) * 0.01).toFixed(2)} s`}
-          sub="Simulated (10ms/step)"
         />
       </div>
 
