@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/ew-frontend
+            git pull origin main
+            
+            docker stop ew-frontend || true
+            docker rm ew-frontend || true
+            
+            docker build --build-arg VITE_API_BASE_URL="" -t ew-frontend .
+            
+            docker run -d --name ew-frontend \
+              -p 80:80 \
+              -p 443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              --restart unless-stopped \
+              ew-frontend
