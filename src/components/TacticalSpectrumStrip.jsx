@@ -10,52 +10,39 @@ export default function TacticalSpectrumStrip({ state }) {
     : null;
 
   return (
-    <div style={{
-      background: 'var(--bg-surface)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius-lg)',
-      padding: '16px 20px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 16
-    }}>
+    <div className="bg-white border border-slate-200 rounded-2xl px-4 md:px-5 py-4 flex flex-col gap-4">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 20 }}>📡</span>
-          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>
-            TACTICAL SPECTRUM STRIP ({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz • 20 MHz IBW)
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[20px] shrink-0">📡</span>
+          <span className="text-sm md:text-base font-bold text-slate-600 tracking-[0.5px] uppercase">
+            TACTICAL SPECTRUM STRIP <span className="hidden sm:inline">({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz • 20 MHz IBW)</span>
           </span>
         </div>
         
         {/* Legends */}
-        <div style={{ display: 'flex', gap: 16, fontSize: 12, color: 'var(--text-secondary)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
-            <div style={{ width: 14, height: 14, background: 'var(--blue)', borderRadius: 3, boxShadow: '0 0 6px rgba(59, 130, 246, 0.5)' }}></div>
-            Tuned Channel
+        <div className="flex flex-wrap gap-3 md:gap-4 text-xs text-slate-600">
+          <div className="flex items-center gap-1.5 text-[12px] md:text-[13px] font-medium">
+            <div className="w-3.5 h-3.5 bg-blue-500 rounded-[3px] shadow-[0_0_6px_rgba(59,130,246,0.5)] shrink-0"></div>
+            Tuned
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
-            <div style={{ width: 14, height: 14, border: '2px dashed var(--amber)', borderRadius: 3 }}></div>
+          <div className="flex items-center gap-1.5 text-[12px] md:text-[13px] font-medium">
+            <div className="w-3.5 h-3.5 border-2 border-dashed border-amber-500 rounded-[3px] shrink-0"></div>
             Next Target
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
-            <div style={{ width: 14, height: 14, background: 'var(--green)', borderRadius: 3, boxShadow: '0 0 6px rgba(16, 185, 129, 0.5)' }}></div>
+          <div className="flex items-center gap-1.5 text-[12px] md:text-[13px] font-medium">
+            <div className="w-3.5 h-3.5 bg-green-500 rounded-[3px] shadow-[0_0_6px_rgba(16,185,129,0.5)] shrink-0"></div>
             Signal Hit
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
-            <div style={{ width: 14, height: 14, background: 'var(--red)', borderRadius: 3, boxShadow: '0 0 6px rgba(239, 68, 68, 0.5)' }}></div>
-            Emitter Truth
+          <div className="flex items-center gap-1.5 text-[12px] md:text-[13px] font-medium">
+            <div className="w-3.5 h-3.5 bg-red-500 rounded-[3px] shadow-[0_0_6px_rgba(239,68,68,0.5)] shrink-0"></div>
+            Truth
           </div>
         </div>
       </div>
 
       {/* Strip */}
-      <div style={{
-        display: 'flex',
-        gap: 4,
-        overflowX: 'hidden',
-        paddingBottom: 8
-      }}>
+      <div className="flex gap-1 overflow-x-auto overflow-y-hidden pb-2 hide-scrollbar">
         {bands.map((freq, i) => {
           const isTuned = state.currentFrequency === freq;
           const isNext = state.predictedFrequency === freq;
@@ -65,59 +52,37 @@ export default function TacticalSpectrumStrip({ state }) {
           // if it ever gets added. (Mocking for B10 / 310 MHz as seen in the original screenshot if it's the demo)
           const isTruth = state.emitterTruths?.includes(freq) || (state.source === 'demo' && freq === 310);
           
-          let border = '1px solid var(--border-strong)';
-          let bg = 'var(--bg-page)';
-          let textColor = 'var(--text-primary)';
-          let numColor = 'var(--text-muted)';
+          let borderClass = 'border border-slate-400';
+          let bgClass = 'bg-slate-50';
+          let numColorClass = 'text-slate-400';
+          let shadowClass = '';
           
           if (isHit) {
-            bg = 'rgba(16, 185, 129, 0.15)';
-            border = '2px solid var(--green)';
-            numColor = 'var(--green)';
+            bgClass = 'bg-green-500/15';
+            borderClass = 'border-2 border-solid border-green-500';
+            numColorClass = 'text-green-500';
+            shadowClass = 'shadow-[0_0_12px_rgba(16,185,129,0.2)]';
           } else if (isTuned) {
-            bg = 'rgba(59, 130, 246, 0.15)';
-            border = '2px solid var(--blue)';
-            numColor = 'var(--blue)';
+            bgClass = 'bg-blue-500/15';
+            borderClass = 'border-2 border-solid border-blue-500';
+            numColorClass = 'text-blue-500';
+            shadowClass = 'shadow-[0_0_12px_rgba(59,130,246,0.2)]';
           }
           
           // Next target outline overlaps the existing background
           if (isNext) {
-            border = '2px dashed var(--amber)';
-            numColor = 'var(--amber)';
+            borderClass = 'border-2 border-dashed border-amber-500';
+            numColorClass = 'text-amber-500';
           }
 
           return (
-            <div key={i} style={{
-              boxSizing: 'border-box',
-              flex: 1,
-              minWidth: 0,
-              height: 52,
-              border,
-              background: bg,
-              borderRadius: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 2,
-              position: 'relative',
-              boxShadow: isHit ? '0 0 12px rgba(16, 185, 129, 0.2)' : (isTuned ? '0 0 12px rgba(59, 130, 246, 0.2)' : 'none')
-            }}>
-              <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--text-secondary)' }}>B{i}</span>
-              <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: numColor, letterSpacing: -0.5 }}>{freq}</span>
+            <div key={i} className={`box-border flex-1 min-w-0 h-[52px] rounded flex flex-col justify-center items-center gap-0.5 relative ${borderClass} ${bgClass} ${shadowClass}`}>
+              <span className="text-[9px] font-semibold text-slate-600">B{i}</span>
+              <span className={`mono text-xs font-bold tracking-[-0.5px] ${numColorClass}`}>{freq}</span>
               
               {/* Emitter Truth Dot */}
               {isTruth && (
-                <div style={{
-                  position: 'absolute',
-                  top: -6,
-                  right: -6,
-                  width: 12,
-                  height: 12,
-                  background: 'var(--red)',
-                  borderRadius: '50%',
-                  boxShadow: '0 0 0 3px var(--bg-surface), 0 0 8px rgba(239, 68, 68, 0.8)'
-                }} />
+                <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-red-500 rounded-full shadow-[0_0_0_3px_#FFFFFF,0_0_8px_rgba(239,68,68,0.8)]" />
               )}
             </div>
           );

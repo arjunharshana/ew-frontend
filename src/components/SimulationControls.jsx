@@ -8,16 +8,11 @@ function Button({ children, onClick, primary }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        fontSize: 13,
-        fontWeight: 500,
-        padding: '7px 14px',
-        borderRadius: 'var(--radius-sm)',
-        border: primary ? 'none' : '1px solid var(--border)',
-        background: primary ? 'var(--blue)' : 'transparent',
-        color: primary ? '#fff' : 'var(--text-primary)',
-        cursor: 'pointer',
-      }}
+      className={`text-[13px] font-medium px-3.5 py-1.5 rounded-lg cursor-pointer ${
+        primary
+          ? 'border-none bg-blue-500 text-white'
+          : 'border border-slate-200 bg-transparent text-slate-900'
+      }`}
     >
       {children}
     </button>
@@ -29,68 +24,54 @@ export default function SimulationControls({ running, scenario, setScenario, sce
   const [seed, setSeed] = useState(42);
 
   return (
-    <aside
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 24,
-        height: '100%'
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 16 }}>⚙️</span>
-        <h3 style={{ fontSize: 13, fontWeight: 600, margin: 0, textTransform: 'uppercase', letterSpacing: 0.5, color: 'var(--text-secondary)' }}>
-          Simulation Controls
-        </h3>
-      </div>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Scenario</label>
-          <ScenarioSelector 
-            scenario={scenario} 
-            onChange={(newScenario) => {
-              setScenario(newScenario);
-              actions.restart(newScenario, selectedSchedulerId, seed, speed.replace('×', 'x'), running);
-            }} 
-            options={scenarioOptions} 
-          />
+    <aside className="flex flex-col gap-6 h-full">
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-base">⚙️</span>
+          <h3 className="text-[13px] font-semibold m-0 uppercase tracking-[0.5px] text-slate-600">
+            Simulation Controls
+          </h3>
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Scan Strategy Algorithm</label>
-          <SchedulerSelector 
-            selectedId={selectedSchedulerId} 
-            onChange={(newSchedulerId) => {
-              setSelectedSchedulerId(newSchedulerId);
-              actions.restart(scenario, newSchedulerId, seed, speed.replace('×', 'x'), running);
-            }} 
-            options={schedulerOptions} 
-          />
-        </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Random Seed</label>
-          <input 
-            type="number" 
-            value={seed} 
-            onChange={e => setSeed(e.target.value)}
-            style={{
-              padding: '8px 12px',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-sm)',
-              background: 'var(--bg-page)',
-              color: 'var(--text-primary)',
-              fontSize: 13,
-              width: '100%',
-              boxSizing: 'border-box'
-            }}
-          />
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-semibold uppercase tracking-[0.05em] text-slate-500">Scenario</label>
+            <ScenarioSelector 
+              scenario={scenario} 
+              onChange={(newScenario) => {
+                setScenario(newScenario);
+                actions.restart(newScenario, selectedSchedulerId, seed, speed.replace('×', 'x'), running);
+              }} 
+              options={scenarioOptions} 
+            />
+          </div>
+          
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-semibold uppercase tracking-[0.05em] text-slate-500">Algorithm</label>
+            <SchedulerSelector 
+              selectedId={selectedSchedulerId} 
+              onChange={(newSchedulerId) => {
+                setSelectedSchedulerId(newSchedulerId);
+                actions.restart(scenario, newSchedulerId, seed, speed.replace('×', 'x'), running);
+              }} 
+              options={schedulerOptions} 
+            />
+          </div>
+          
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-semibold uppercase tracking-[0.05em] text-slate-500">Seed</label>
+            <input 
+              type="number" 
+              value={seed} 
+              onChange={e => setSeed(e.target.value)}
+              className="px-3 py-1.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 text-[13px] w-full box-border focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            />
+          </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+      <div className="flex flex-col gap-2.5 mt-4">
+        <div className="grid grid-cols-2 gap-2">
           {!running ? (
             <Button primary onClick={() => actions.start(speed.replace('×', 'x'))}>▶ Start</Button>
           ) : (
@@ -101,9 +82,9 @@ export default function SimulationControls({ running, scenario, setScenario, sce
           <Button onClick={actions.step}>⏭ Step</Button>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
-          <label style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Execution Speed</label>
-          <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-semibold uppercase tracking-[0.05em] text-slate-500 mt-1">Execution Speed</label>
+          <div className="flex border border-slate-200 rounded-lg overflow-hidden bg-slate-50 p-0.5">
             {SPEEDS.map((s) => (
               <button
                 key={s}
@@ -111,16 +92,11 @@ export default function SimulationControls({ running, scenario, setScenario, sce
                   setSpeed(s);
                   if (actions.setSpeed) actions.setSpeed(s.replace('×', 'x'));
                 }}
-                style={{
-                  flex: 1,
-                  fontSize: 12.5,
-                  padding: '8px 0',
-                  border: 'none',
-                  background: speed === s ? 'var(--bg-surface-secondary)' : 'transparent',
-                  color: speed === s ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  fontWeight: speed === s ? 600 : 400,
-                  cursor: 'pointer',
-                }}
+                className={`flex-1 text-[12px] py-1 border-none rounded-md cursor-pointer transition-colors ${
+                  speed === s
+                    ? 'bg-white text-blue-600 font-semibold shadow-sm'
+                    : 'bg-transparent text-slate-500 font-medium hover:text-slate-900 hover:bg-slate-200/50'
+                }`}
               >
                 {s}
               </button>
@@ -131,15 +107,3 @@ export default function SimulationControls({ running, scenario, setScenario, sce
     </aside>
   );
 }
-
-const menuItemStyle = {
-  display: 'block',
-  width: '100%',
-  textAlign: 'left',
-  padding: '8px 12px',
-  fontSize: 13,
-  border: 'none',
-  background: 'transparent',
-  cursor: 'pointer',
-  color: 'var(--text-primary)',
-};

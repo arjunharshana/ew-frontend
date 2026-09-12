@@ -14,17 +14,7 @@ export default function ScenarioSelector({ scenario, onChange, disabled, options
       value={scenario}
       disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
-      style={{
-        fontSize: 13,
-        color: 'var(--text-primary)',
-        background: 'var(--bg-surface-secondary)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-sm)',
-        padding: '8px 12px',
-        width: '100%',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        boxSizing: 'border-box'
-      }}
+      className={`text-[13px] text-slate-900 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 w-full box-border ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {scenarios.map((s) => (
         <option key={s.id} value={s.id}>

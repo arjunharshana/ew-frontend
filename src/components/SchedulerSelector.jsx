@@ -27,56 +27,25 @@ export default function SchedulerSelector({ selectedId, onChange, options }) {
   ];
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} className="relative w-full">
       <button
         onClick={() => setOpen(!open)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
-          boxSizing: 'border-box',
-          fontSize: 13,
-          color: 'var(--text-primary)',
-          background: 'var(--bg-surface-secondary)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-sm)',
-          padding: '8px 12px',
-          cursor: 'pointer',
-          textAlign: 'left',
-          boxShadow: 'var(--shadow-sm)'
-        }}
+        className="flex items-center justify-between w-full box-border text-[13px] text-slate-900 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 cursor-pointer text-left shadow-sm"
       >
-        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap">
           {selected.name} {selected.overall_ir ? `(${selected.overall_ir} IR)` : ''}
         </span>
-        <span style={{ fontSize: 10, marginLeft: 10, flexShrink: 0 }}>▼</span>
+        <span className="text-[10px] ml-2.5 shrink-0">▼</span>
       </button>
 
       {open && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '120%',
-            left: 0,
-            width: '100%',
-            maxHeight: 400,
-            overflowY: 'auto',
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-lg)',
-            zIndex: 50,
-            padding: 8,
-            boxSizing: 'border-box'
-          }}
-        >
+        <div className="absolute top-[120%] left-0 w-full max-h-[400px] overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg z-50 p-2 box-border">
           {categories.map((cat) => {
             const catOptions = options.filter(o => o.category === cat.id);
             if (catOptions.length === 0) return null;
             return (
-              <div key={cat.id} style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', padding: '4px 8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div key={cat.id} className="mb-3">
+                <div className="text-[11px] font-semibold text-slate-600 px-2 py-1 uppercase tracking-[0.05em]">
                   {cat.label}
                 </div>
                 {catOptions.map((opt) => (
@@ -86,33 +55,18 @@ export default function SchedulerSelector({ selectedId, onChange, options }) {
                       onChange(opt.id);
                       setOpen(false);
                     }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '8px 12px',
-                      fontSize: 13,
-                      border: 'none',
-                      borderRadius: 'var(--radius-sm)',
-                      background: opt.id === selectedId ? 'var(--blue)' : 'transparent',
-                      color: opt.id === selectedId ? '#fff' : 'var(--text-primary)',
-                      cursor: 'pointer',
-                      transition: 'background 0.2s',
-                      marginBottom: 2
-                    }}
+                    className={`block w-full text-left px-3 py-2 text-[13px] border-none rounded-lg cursor-pointer transition-colors duration-200 mb-0.5 ${
+                      opt.id === selectedId ? 'bg-blue-500 text-white' : 'bg-transparent text-slate-900'
+                    }`}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div className="flex justify-between">
                       <span>
                         {opt.name} {opt.overall_ir ? `(${opt.overall_ir} IR)` : ''}
                       </span>
                       {opt.badge && (
-                        <span style={{ 
-                          fontSize: 10, 
-                          padding: '2px 6px', 
-                          borderRadius: 999, 
-                          background: opt.id === selectedId ? 'rgba(255,255,255,0.2)' : 'var(--bg-surface-secondary)',
-                          color: opt.id === selectedId ? '#fff' : 'var(--text-secondary)'
-                        }}>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                          opt.id === selectedId ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                        }`}>
                           {opt.badge}
                         </span>
                       )}

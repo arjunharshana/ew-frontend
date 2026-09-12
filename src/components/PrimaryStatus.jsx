@@ -14,7 +14,7 @@ function ConfidenceRing({ confidence }) {
         cy={size / 2}
         r={r}
         fill="none"
-        stroke="var(--border)"
+        stroke="#e2e8f0"
         strokeWidth={stroke}
       />
       <circle
@@ -22,7 +22,7 @@ function ConfidenceRing({ confidence }) {
         cy={size / 2}
         r={r}
         fill="none"
-        stroke="var(--amber)"
+        stroke="#f59e0b"
         strokeWidth={stroke}
         strokeDasharray={c}
         strokeDashoffset={c * (1 - pct)}
@@ -35,99 +35,69 @@ function ConfidenceRing({ confidence }) {
 
 function StatusBlock({ label, value, sub, accent }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</span>
+    <div className="flex flex-col gap-0.5">
+      <span className="text-[13px] font-semibold text-slate-600 uppercase tracking-[0.5px]">{label}</span>
       <span
-        className="mono"
-        style={{ fontSize: 32, fontWeight: 700, color: accent ?? 'var(--text-primary)', lineHeight: 1.1, textShadow: accent ? `0 2px 12px ${accent}40` : 'none' }}
+        className={`mono text-[32px] font-bold leading-[1.1] ${!accent ? 'text-slate-900' : ''}`}
+        style={accent ? { color: accent, textShadow: `0 2px 12px ${accent}40` } : {}}
       >
         {value}
       </span>
-      <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-muted)' }}>{sub}</span>
+      <span className="text-[13px] font-medium text-slate-400">{sub}</span>
     </div>
   );
 }
 
 export default function PrimaryStatus({ state }) {
   return (
-    <section
-      style={{
-        display: 'flex',
-        gap: 32,
-        padding: '12px 24px',
-        background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
-        borderBottom: '1px solid var(--border)',
-        boxShadow: 'var(--shadow-sm)',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          borderLeft: '4px solid var(--blue)',
-          paddingLeft: 20,
-        }}
-      >
-        <StatusBlock
-          label="Current scan"
-          value={formatMHz(state.currentFrequency)}
-          sub={`Bin ${state.currentBin ?? '—'}`}
-          accent="var(--blue)"
-        />
-      </div>
+    <section className="flex flex-wrap xl:flex-nowrap gap-4 lg:gap-8 px-4 lg:px-6 py-3 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-slate-200 shadow-sm items-center justify-between">
+      <div className="flex flex-wrap xl:flex-nowrap gap-4 lg:gap-8 items-center flex-1">
+        <div className="border-l-4 border-blue-500 pl-4 lg:pl-5 shrink-0">
+          <StatusBlock
+            label="Current scan"
+            value={formatMHz(state.currentFrequency)}
+            sub={`Bin ${state.currentBin ?? '—'}`}
+            accent="#3b82f6"
+          />
+        </div>
 
-      <div
-        style={{
-          borderLeft: '4px solid var(--amber)',
-          paddingLeft: 20,
-        }}
-      >
-        <StatusBlock
-          label="Predicted next"
-          value={formatMHz(state.predictedFrequency)}
-          sub={`Bin ${state.predictedBin ?? '—'}`}
-          accent="var(--amber)"
-        />
-      </div>
+        <div className="border-l-4 border-amber-500 pl-4 lg:pl-5 shrink-0">
+          <StatusBlock
+            label="Predicted next"
+            value={formatMHz(state.predictedFrequency)}
+            sub={`Bin ${state.predictedBin ?? '—'}`}
+            accent="#f59e0b"
+          />
+        </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <ConfidenceRing confidence={state.confidence} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>Confidence</span>
-          <span className="mono" style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.1, color: 'var(--amber)', textShadow: '0 2px 12px var(--amber-light)' }}>
-            {formatPercent(state.confidence)}
-          </span>
-          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-muted)' }}>{state.confidenceLabel}</span>
+        <div className="flex items-center gap-3 shrink-0 lg:pl-2">
+          <ConfidenceRing confidence={state.confidence} />
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[13px] font-semibold text-slate-600 uppercase tracking-[0.5px]">Confidence</span>
+            <span className="mono text-[32px] font-bold leading-[1.1] text-amber-500 [text-shadow:0_2px_12px_#fef3c7]">
+              {formatPercent(state.confidence)}
+            </span>
+            <span className="text-[13px] font-medium text-slate-400">{state.confidenceLabel}</span>
+          </div>
         </div>
       </div>
 
-      <div
-        style={{
-          borderLeft: '1px solid var(--border)',
-          paddingLeft: 32,
-          marginLeft: 'auto',
-          display: 'flex',
-          gap: 32,
-          alignItems: 'center'
-        }}
-      >
-        <StatusBlock
-          label="Total steps"
-          value={state.timestep ?? 0}
-          sub="Executed"
-        />
-        <StatusBlock
-          label="Time elapsed"
-          value={`${((state.timestep ?? 0) * 0.01).toFixed(2)} s`}
-        />
-      </div>
+      <div className="flex flex-wrap md:flex-nowrap gap-4 lg:gap-8 items-center mt-2 xl:mt-0 pt-2 xl:pt-0 border-t xl:border-t-0 xl:border-l border-slate-200 xl:pl-8 shrink-0 w-full xl:w-auto">
+        <div className="flex gap-4 lg:gap-8 shrink-0">
+          <StatusBlock
+            label="Total steps"
+            value={state.timestep ?? 0}
+            sub="Executed"
+          />
+          <StatusBlock
+            label="Time elapsed"
+            value={`${((state.timestep ?? 0) * 0.01).toFixed(2)} s`}
+          />
+        </div>
 
-      <div
-        style={{
-          borderLeft: '1px solid var(--border)',
-          paddingLeft: 32,
-        }}
-      >
-        <ScanTimeline recentScans={state.recentScans} />
+        <div className="border-l border-slate-200 pl-4 lg:pl-8 ml-auto lg:ml-0 shrink-0">
+          <ScanTimeline recentScans={state.recentScans} />
+        </div>
       </div>
     </section>
   );

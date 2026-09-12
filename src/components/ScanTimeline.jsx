@@ -3,22 +3,22 @@ import { resultColor, resultSymbol } from '../utils/formatters.js';
 export default function ScanTimeline({ recentScans }) {
   return (
     <div>
-      <span style={{ fontSize: 12.5, color: 'var(--text-secondary)', display: 'block', marginBottom: 8 }}>
+      <span className="text-[12.5px] text-slate-600 block mb-2">
         Recent scans
       </span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+      <div className="flex items-center gap-0">
         {recentScans.map((scan, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 44 }}>
-              <span className="mono" style={{ fontSize: 13.5, fontWeight: 500 }}>
+          <div key={i} className="flex items-center">
+            <div className="flex flex-col items-center min-w-[44px]">
+              <span className="mono text-[13.5px] font-medium">
                 {scan.freq}
               </span>
-              <span style={{ fontSize: 12, color: resultColor(scan.result), marginTop: 2 }}>
+              <span className="text-xs mt-0.5" style={{ color: resultColor(scan.result) }}>
                 {resultSymbol(scan.result)}
               </span>
             </div>
             {i < recentScans.length - 1 && (
-              <span style={{ width: 18, height: 1, background: 'var(--border-strong)' }} />
+              <span className="w-[18px] h-[1px] bg-slate-300" />
             )}
           </div>
         ))}

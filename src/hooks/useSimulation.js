@@ -358,8 +358,8 @@ export function useSimulation() {
       const session = await api.startSession(scenario, schedulerName, seed);
       if (session) {
         sessionIdRef.current = session.sessionId;
-        setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
-        setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+        setState(prev => ({ ...prev, timestep: 0, scanHistory: [], recentScans: [] }));
+        setMetrics(prev => ({ ...prev, totalScans: 0, interceptionRateHistory: [], decisionModeHistory: [] }));
         setRealTimeElapsed(0);
         setRunning(true);
         setIsDemo(false);
@@ -382,8 +382,8 @@ export function useSimulation() {
         await api.completeSession(sessionIdRef.current);
         sessionIdRef.current = null;
       }
-      setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
-      setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+      setState(prev => ({ ...prev, timestep: 0, scanHistory: [], recentScans: [] }));
+      setMetrics(prev => ({ ...prev, totalScans: 0, interceptionRateHistory: [], decisionModeHistory: [] }));
       setRealTimeElapsed(0);
       if (isDemo) {
         setState(demoState);
@@ -404,8 +404,8 @@ export function useSimulation() {
       const session = await api.startSession(newScenario, newScheduler, seed);
       if (session) {
         sessionIdRef.current = session.sessionId;
-        setState(prev => ({ ...prev, scanHistory: [], recentScans: [] }));
-        setMetrics(prev => ({ ...prev, interceptionRateHistory: [], decisionModeHistory: [] }));
+        setState(prev => ({ ...prev, timestep: 0, scanHistory: [], recentScans: [] }));
+        setMetrics(prev => ({ ...prev, totalScans: 0, interceptionRateHistory: [], decisionModeHistory: [] }));
         setRealTimeElapsed(0);
         setIsDemo(false);
         await api.setSpeed(session.sessionId, initialSpeed);

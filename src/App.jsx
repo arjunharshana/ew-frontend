@@ -11,13 +11,6 @@ import EmitterDrawer from './components/EmitterDrawer.jsx';
 import BenchmarkPanel from './components/BenchmarkPanel.jsx';
 import { useSimulation } from './hooks/useSimulation.js';
 
-const card = {
-  background: 'var(--bg-surface)',
-  border: '1px solid var(--border)',
-  borderRadius: 'var(--radius-lg)',
-  boxShadow: 'var(--shadow-sm)',
-};
-
 export default function App() {
   const sim = useSimulation();
   const [technicalOpen, setTechnicalOpen] = useState(false);
@@ -25,16 +18,7 @@ export default function App() {
   const [benchmarksOpen, setBenchmarksOpen] = useState(false);
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        background: 'var(--bg-page)',
-      }}
-    >
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-50">
       <Header
         running={sim.running}
         connectionStatus={sim.isDemo ? 'offline' : sim.connectionStatus}
@@ -44,23 +28,13 @@ export default function App() {
 
       <PrimaryStatus state={sim.state} />
 
-      <main
-        style={{
-          flex: '1 1 auto',
-          minHeight: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 14,
-          padding: '14px 28px',
-          overflow: 'hidden',
-        }}
-      >
+      <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 md:px-7 md:py-3.5 flex flex-col gap-3.5">
         {/* Main visualization + decision panel */}
-        <div style={{ flex: '1 1 58%', minWidth: 0, minHeight: 0, display: 'flex', gap: 14 }}>
+        <div className="flex flex-col lg:flex-row gap-3.5 flex-1 min-h-0 shrink-0">
           {/* Main Panel */}
-          <div style={{ flex: '1 1 68%', minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="flex-1 flex flex-col gap-3.5 min-w-0 min-h-[400px] lg:min-h-0">
             <TacticalSpectrumStrip state={sim.state} />
-            <div style={{ ...card, flex: '1 1 auto', minHeight: 0, padding: 18 }}>
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm flex-1 flex flex-col min-h-[250px] lg:min-h-0 p-4 lg:p-[18px]">
               <FrequencyActivity
                 scanHistory={sim.state.scanHistory}
                 predictedFrequency={sim.state.predictedFrequency}
@@ -69,7 +43,7 @@ export default function App() {
             </div>
           </div>
           {/* Sidebar Controls */}
-          <div style={{ ...card, flex: '0 0 280px', minHeight: 0, padding: 22 }}>
+          <div className="flex-none w-full lg:w-[260px] xl:w-[280px] bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col p-4 lg:p-5 shrink-0 self-start">
             <SimulationControls
               running={sim.running}
               scenario={sim.scenario}
@@ -84,18 +58,16 @@ export default function App() {
         </div>
 
         {/* Performance */}
-        <div style={{ flex: '0 0 auto', display: 'flex', gap: 14, minHeight: 200 }}>
-          <div style={{ ...card, flex: '1 1 38%', padding: '16px 22px', minHeight: 0 }}>
+        <div className="flex flex-col lg:flex-row gap-3.5 flex-none shrink-0 min-h-[250px] xl:min-h-[200px]">
+          <div className="flex-none w-full lg:w-[45%] xl:w-[38%] bg-white border border-slate-200 rounded-2xl shadow-sm p-4 lg:px-[22px] lg:py-4 self-start">
             <PerformancePanel metrics={sim.metrics} />
           </div>
-          <div style={{ ...card, flex: '1 1 62%', padding: '14px 20px 10px', minHeight: 0 }}>
+          <div className="flex-1 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 lg:px-5 lg:pt-3.5 lg:pb-2.5 min-h-[200px] lg:min-h-0">
             <PerformanceChart data={sim.metrics.interceptionRateHistory} />
           </div>
         </div>
 
       </main>
-
-
 
       <TechnicalDrawer
         open={technicalOpen}

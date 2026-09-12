@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // Proxies to the Node/Express backend (ew-scheduler-backend), NOT the ML
 // team's FastAPI service directly. The Node backend owns the session
@@ -9,7 +10,7 @@ const BACKEND_TARGET = process.env.VITE_BACKEND_URL || 'http://localhost:4000';
 const BACKEND_WS_TARGET = BACKEND_TARGET.replace(/^http/, 'ws');
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
     proxy: {

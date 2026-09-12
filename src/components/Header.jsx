@@ -2,66 +2,29 @@ import StatusIndicator from './StatusIndicator.jsx';
 
 export default function Header({ running, connectionStatus, schedulerVersion, onOpenTechnical }) {
   return (
-    <header
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        padding: '16px 28px',
-        borderBottom: '1px solid var(--border)',
-        background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
-      }}
-    >
-      {/* Empty left column to balance grid */}
-      <div />
-
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ 
-          fontSize: 32, 
-          fontWeight: 800, 
-          margin: 0, 
-          letterSpacing: '0.05em',
-          fontFamily: "'JetBrains Mono', monospace",
-          background: 'linear-gradient(135deg, #f97316, #ef4444)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
-        }}>
+    <header className="flex flex-wrap md:flex-nowrap items-center justify-between py-4 px-4 md:px-7 border-b border-slate-200 bg-gradient-to-br from-blue-50 to-purple-50 gap-4">
+      {/* App Title */}
+      <div className="flex-1 min-w-[150px]">
+        <h1 className="text-[24px] md:text-[32px] font-extrabold m-0 tracking-[0.05em] font-mono bg-gradient-to-br from-orange-500 to-red-500 bg-clip-text text-transparent leading-none">
           PRISM
         </h1>
-        <div style={{ 
-          fontSize: 15, 
-          color: 'var(--text-secondary)',
-          marginTop: 4,
-          fontWeight: 500,
-          letterSpacing: '-0.01em'
-        }}>
+        <div className="text-[12px] md:text-[15px] text-slate-600 mt-1 md:mt-1.5 font-medium tracking-[-0.01em] hidden md:block">
           Predictive Receiver for Intelligent Spectrum Monitoring
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, justifySelf: 'end' }}>
+      {/* Controls */}
+      <div className="flex flex-wrap items-center justify-end gap-3 md:gap-5 flex-1 min-w-[280px]">
         <span
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: 13,
-            color: running ? 'var(--green)' : 'var(--text-muted)',
-            fontWeight: 500,
-          }}
+          className={`inline-flex items-center gap-1.5 text-[12px] md:text-[13px] font-medium ${running ? 'text-green-500' : 'text-slate-400'}`}
         >
           <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: '50%',
-              background: running ? 'var(--green)' : 'var(--text-muted)',
-            }}
+            className={`w-[6px] h-[6px] md:w-[7px] md:h-[7px] rounded-full ${running ? 'bg-green-500' : 'bg-slate-400'}`}
           />
           {running ? 'Running' : 'Paused'}
         </span>
 
-        <span className="mono" style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>
+        <span className="mono text-[11.5px] md:text-[12.5px] text-slate-600 hidden sm:inline">
           {schedulerVersion}
         </span>
 
@@ -69,15 +32,7 @@ export default function Header({ running, connectionStatus, schedulerVersion, on
 
         <button
           onClick={onOpenTechnical}
-          style={{
-            fontSize: 13,
-            color: 'var(--text-secondary)',
-            background: 'transparent',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '6px 12px',
-            cursor: 'pointer',
-          }}
+          className="text-[12px] md:text-[13px] text-slate-600 bg-transparent border border-slate-200 rounded-lg px-2.5 py-1 md:px-3 md:py-1.5 cursor-pointer hover:bg-slate-50 shrink-0"
         >
           Technical
         </button>

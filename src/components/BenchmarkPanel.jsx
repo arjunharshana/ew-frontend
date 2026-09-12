@@ -1,30 +1,29 @@
 const MODEL_COLORS = {
   'V4.0 Hybrid': '#10B981',     // Green
-  'Whittle W3': '#3B82F6',      // Blue
-  'Context-Aware': '#F59E0B',   // Orange/Yellow
-  'V4.1 LSTM': '#8B5CF6',       // Purple
-  'V5.0 Belief': '#64748B',     // Slate/Gray
+  'Whittle W3': '#3b82f6',      // Blue
+  'Context-Aware': '#f59e0b',   // Orange/Yellow
+  'V4.1 LSTM': '#8b5cf6',       // Purple
+  'V5.0 Belief': '#64748b',     // Slate/Gray
 };
 
 function ScenarioBars({ scenario }) {
   return (
-    <div style={{ marginBottom: 20 }}>
-      <span style={{ fontSize: 13, fontWeight: 500, display: 'block', marginBottom: 8 }}>{scenario.name}</span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+    <div className="mb-5">
+      <span className="text-[13px] font-medium block mb-2">{scenario.name}</span>
+      <div className="flex flex-col gap-[5px]">
         {Object.entries(scenario.values).map(([model, val]) => (
-          <div key={model} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 11.5, color: 'var(--text-secondary)', width: 118, flexShrink: 0 }}>{model}</span>
-            <div style={{ flex: 1, background: 'var(--bg-surface-secondary)', borderRadius: 3, height: 10, position: 'relative' }}>
+          <div key={model} className="flex items-center gap-2">
+            <span className="text-[11.5px] text-slate-600 w-[118px] shrink-0">{model}</span>
+            <div className="flex-1 bg-slate-100 rounded-[3px] h-[10px] relative">
               <div
+                className="h-full rounded-[3px]"
                 style={{
                   width: `${val}%`,
-                  height: '100%',
-                  background: MODEL_COLORS[model] ?? 'var(--muted)',
-                  borderRadius: 3,
+                  background: MODEL_COLORS[model] ?? '#94a3b8',
                 }}
               />
             </div>
-            <span className="mono" style={{ fontSize: 11.5, width: 40, textAlign: 'right' }}>{val.toFixed(1)}%</span>
+            <span className="mono text-[11.5px] w-10 text-right">{val.toFixed(1)}%</span>
           </div>
         ))}
       </div>
@@ -37,31 +36,16 @@ export default function BenchmarkPanel({ open, onClose, benchmarks }) {
 
   return (
     <>
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(23,32,51,0.25)', zIndex: 30 }} />
-      <div
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 520,
-          maxHeight: '80vh',
-          overflowY: 'auto',
-          background: 'var(--bg-surface)',
-          borderRadius: 'var(--radius-lg)',
-          boxShadow: 'var(--shadow-md)',
-          zIndex: 31,
-          padding: 24,
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+      <div onClick={onClose} className="fixed inset-0 bg-[#172033]/25 z-30" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-md z-[31] p-6">
+        <div className="flex justify-between items-center mb-[18px]">
           <div>
-            <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>Benchmark comparison</h2>
-            <p style={{ fontSize: 12.5, color: 'var(--text-secondary)', margin: '2px 0 0' }}>
+            <h2 className="text-base font-semibold m-0">Benchmark comparison</h2>
+            <p className="text-[12.5px] text-slate-600 mt-[2px] mb-0 mx-0">
               Interception rate by scheduler and evaluation scenario
             </p>
           </div>
-          <button onClick={onClose} style={{ border: 'none', background: 'transparent', fontSize: 18, cursor: 'pointer', color: 'var(--text-secondary)' }}>
+          <button onClick={onClose} className="border-none bg-transparent text-lg cursor-pointer text-slate-600 hover:text-slate-900">
             ×
           </button>
         </div>

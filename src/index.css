@@ -1,35 +1,52 @@
-:root {
-  --bg-page: #F8FAFC;
-  --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F1F5F9;
-  --border: #E2E8F0;
-  --border-strong: #94A3B8;
+@import "tailwindcss";
 
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
-
-  --blue: #3B82F6;
-  --blue-light: #EFF6FF;
-  --amber: #F59E0B;
-  --amber-light: #FFFBEB;
-  --green: #10B981;
-  --green-light: #ECFDF5;
-  --red: #EF4444;
-  --red-light: #FEF2F2;
-  --purple: #8B5CF6;
-  --muted: #94A3B8;
-
+@theme {
   --font-ui: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html, body, #root {
+    @apply h-full;
+  }
+  body {
+    @apply m-0 font-ui text-slate-900 bg-gradient-to-br from-[#f4f7ff] to-[#f9f5ff] bg-fixed antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  button {
+    font-family: inherit;
+  }
+  :focus-visible {
+    @apply outline-2 outline-blue-500 outline-offset-2;
+  }
+}
 
-  --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.02);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(15, 23, 42, 0.02);
+@layer utilities {
+  .tooltip-term {
+    @apply border-b border-dotted border-slate-400 cursor-help;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mono {
+    @apply font-mono tabular-nums;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400 rounded-lg;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 @keyframes pulse-ring {
@@ -43,64 +60,9 @@
   100% { transform: scale(0.95); }
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-ui);
-  background: linear-gradient(135deg, #f4f7ff 0%, #f9f5ff 100%);
-  background-attachment: fixed;
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  font-feature-settings: 'tnum' 1;
-}
-
-button {
-  font-family: inherit;
-}
-
-.mono {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Visible keyboard focus, respected across the app */
-:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
 }
-
-.tooltip-term {
-  border-bottom: 1px dotted var(--text-muted);
-  cursor: help;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-

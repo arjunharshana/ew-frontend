@@ -3,19 +3,19 @@ import { formatPercent } from '../utils/formatters.js';
 
 function Row({ label, value, tooltip }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid var(--border)' }}>
-      <span className={tooltip ? 'tooltip-term' : undefined} title={tooltip} style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+    <div className="flex justify-between py-[7px] border-b border-slate-200">
+      <span className={`${tooltip ? 'tooltip-term' : ''} text-[13px] text-slate-600`} title={tooltip}>
         {label}
       </span>
-      <span className="mono" style={{ fontSize: 13 }}>{value}</span>
+      <span className="mono text-[13px]">{value}</span>
     </div>
   );
 }
 
 function Section({ title, children }) {
   return (
-    <div style={{ marginBottom: 22 }}>
-      <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', margin: '0 0 6px', textTransform: 'none' }}>
+    <div className="mb-[22px]">
+      <h3 className="text-[13px] font-semibold text-slate-600 m-0 mb-1.5 normal-case">
         {title}
       </h3>
       {children}
@@ -43,25 +43,12 @@ export default function TechnicalDrawer({
     <>
       <div
         onClick={onClose}
-        style={{ position: 'fixed', inset: 0, background: 'rgba(23,32,51,0.25)', zIndex: 20 }}
+        className="fixed inset-0 bg-[#172033]/25 z-20"
       />
-      <aside
-        style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: 380,
-          background: 'var(--bg-surface)',
-          borderLeft: '1px solid var(--border)',
-          zIndex: 21,
-          overflowY: 'auto',
-          padding: '24px 24px 40px',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>Technical mode</h2>
-          <button onClick={onClose} style={{ border: 'none', background: 'transparent', fontSize: 18, cursor: 'pointer', color: 'var(--text-secondary)' }}>
+      <aside className="fixed top-0 right-0 bottom-0 w-[380px] bg-white border-l border-slate-200 z-[21] overflow-y-auto pt-6 px-6 pb-10">
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-base font-semibold m-0">Technical mode</h2>
+          <button onClick={onClose} className="border-none bg-transparent text-lg cursor-pointer text-slate-600 hover:text-slate-900">
             ×
           </button>
         </div>
@@ -102,45 +89,27 @@ export default function TechnicalDrawer({
         </Section>
 
         <Section title="Evaluation mode">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
-            <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Ground truth overlay</span>
+          <div className="flex justify-between items-center py-1">
+            <span className="text-[13px] text-slate-600">Ground truth overlay</span>
             <button
               onClick={() => setGroundTruthOn((v) => !v)}
-              style={{
-                fontSize: 12,
-                padding: '4px 10px',
-                borderRadius: 999,
-                border: '1px solid var(--border)',
-                background: groundTruthOn ? 'var(--amber-light)' : 'var(--bg-surface-secondary)',
-                color: groundTruthOn ? 'var(--amber)' : 'var(--text-secondary)',
-                cursor: 'pointer',
-              }}
+              className={`text-xs px-2.5 py-1 rounded-full border border-slate-200 cursor-pointer ${groundTruthOn ? 'bg-amber-50 text-amber-500' : 'bg-slate-100 text-slate-600'}`}
             >
               {groundTruthOn ? 'ON' : 'OFF'}
             </button>
           </div>
           {groundTruthOn && (
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>
+            <p className="text-xs text-slate-400 mt-1.5">
               Evaluation only — not used by scheduler.
             </p>
           )}
         </Section>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 24 }}>
-          <button onClick={onOpenEmitters} style={linkButtonStyle}>View emitter details →</button>
-          <button onClick={onOpenBenchmarks} style={linkButtonStyle}>View benchmark comparison →</button>
+        <div className="flex flex-col gap-2 mt-6">
+          <button onClick={onOpenEmitters} className="text-left text-[13px] text-blue-500 bg-transparent border-none p-0 cursor-pointer hover:underline">View emitter details →</button>
+          <button onClick={onOpenBenchmarks} className="text-left text-[13px] text-blue-500 bg-transparent border-none p-0 cursor-pointer hover:underline">View benchmark comparison →</button>
         </div>
       </aside>
     </>
   );
 }
-
-const linkButtonStyle = {
-  textAlign: 'left',
-  fontSize: 13,
-  color: 'var(--blue)',
-  background: 'transparent',
-  border: 'none',
-  padding: 0,
-  cursor: 'pointer',
-};

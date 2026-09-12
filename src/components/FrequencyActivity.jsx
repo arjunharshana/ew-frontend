@@ -245,15 +245,15 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+    <div className="flex flex-col h-full">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-1">
         <div>
-          <h2 style={{ fontSize: 14.5, fontWeight: 600, margin: 0 }}>Frequency activity</h2>
-          <p style={{ fontSize: 12.5, color: 'var(--text-secondary)', margin: '2px 0 0' }}>
+          <h2 className="text-[14.5px] font-semibold m-0">Frequency activity</h2>
+          <p className="text-[12.5px] text-slate-600 mt-[2px] mb-0 mx-0 hidden sm:block">
             Receiver scan history and detected transmissions
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 14, fontSize: 12, color: 'var(--text-secondary)' }}>
+        <div className="flex flex-wrap gap-3 md:gap-3.5 text-xs text-slate-600">
           <LegendDot color={COLORS.hit} label="Intercepted" />
           <LegendDot color={COLORS.miss} label="Miss" />
           <LegendDot color={COLORS.falseAlarm} label="False alarm" />
@@ -266,17 +266,17 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         </div>
       </div>
 
-      <div style={{ position: 'relative', flex: 1, minHeight: 0, display: 'flex' }}>
+      <div className="relative flex-1 min-h-0 flex">
         
         {/* Fixed Y-Axis Overlay */}
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: padding.left, background: 'var(--bg-surface)', borderRight: '1px solid var(--border)', pointerEvents: 'none', zIndex: 10 }}>
+        <div className="absolute left-0 top-0 bottom-0 bg-white border-r border-slate-200 pointer-events-none z-10" style={{ width: padding.left }}>
           {freqValues.map((f, i) => {
             const labelStep = Math.max(1, Math.ceil(freqValues.length / 8));
             if (i % labelStep !== 0 && i !== freqValues.length - 1 && i !== 0) return null;
             const plotH = size.height - padding.top - padding.bottom;
             const y = padding.top + (1 - (f - minFreq) / (maxFreq - minFreq)) * plotH;
             return (
-              <span key={f} style={{ position: 'absolute', right: 10, top: y, transform: 'translateY(-50%)', fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)' }}>
+              <span key={f} className="absolute right-2.5 text-[11px] font-medium text-slate-600" style={{ top: y, transform: 'translateY(-50%)' }}>
                 {f}
               </span>
             );
@@ -284,31 +284,23 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
         </div>
 
         {/* Scrollable Container */}
-        <div ref={containerRef} className="hide-scrollbar" style={{ flex: 1, overflowX: 'auto', overflowY: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div ref={containerRef} className="hide-scrollbar flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none]">
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setHover(null)}
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          className="block w-full h-full"
         />
         {hover && (
           <div
+            className="absolute bg-slate-900 text-white text-xs rounded-md px-[9px] py-[6px] pointer-events-none leading-snug whitespace-nowrap"
             style={{
-              position: 'absolute',
               left: Math.min(hover.mx + 12, Math.max(size.width, canvasRef.current.width / (window.devicePixelRatio || 1)) - 130),
               top: Math.max(hover.my - 46, 0),
-              background: 'var(--text-primary)',
-              color: '#fff',
-              fontSize: 12,
-              borderRadius: 6,
-              padding: '6px 9px',
-              pointerEvents: 'none',
-              lineHeight: 1.4,
-              whiteSpace: 'nowrap',
             }}
           >
             <div className="mono">{hover.freq} MHz · t={hover.t}</div>
-            <div style={{ color: 'rgba(255,255,255,0.75)', textTransform: 'capitalize' }}>
+            <div className="text-white/75 capitalize">
               {hover.result.replace('_', ' ')}
             </div>
           </div>
@@ -321,8 +313,8 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
 
 function LegendDot({ color, label }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
-      <span style={{ width: 10, height: 10, borderRadius: '50%', background: color, display: 'inline-block', boxShadow: `0 0 6px ${color}80` }} />
+    <span className="inline-flex items-center gap-1.5 text-[13px] font-medium">
+      <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: color, boxShadow: `0 0 6px ${color}80` }} />
       {label}
     </span>
   );
@@ -330,14 +322,11 @@ function LegendDot({ color, label }) {
 
 function LegendDiamond({ color, label }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500 }}>
+    <span className="inline-flex items-center gap-1.5 text-[13px] font-medium">
       <span
+        className="w-2.5 h-2.5 inline-block rotate-45"
         style={{
-          width: 10,
-          height: 10,
           background: color,
-          display: 'inline-block',
-          transform: 'rotate(45deg)',
           boxShadow: `0 0 6px ${color}80`
         }}
       />
@@ -348,29 +337,12 @@ function LegendDiamond({ color, label }) {
 
 function Toggle({ checked, onChange, label }) {
   return (
-    <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', marginLeft: 8 }}>
-      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ display: 'none' }} />
-      <div style={{
-        position: 'relative',
-        width: 32,
-        height: 18,
-        borderRadius: 18,
-        background: checked ? 'var(--blue)' : 'var(--border-strong)',
-        transition: 'background 0.2s'
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 2,
-          left: checked ? 16 : 2,
-          width: 14,
-          height: 14,
-          borderRadius: '50%',
-          background: '#fff',
-          transition: 'left 0.2s',
-          boxShadow: 'var(--shadow-sm)'
-        }} />
+    <label className="flex items-center gap-1.5 cursor-pointer ml-2">
+      <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} className="hidden" />
+      <div className={`relative w-8 h-[18px] rounded-full transition-colors duration-200 ${checked ? 'bg-blue-500' : 'bg-slate-400'}`}>
+        <div className={`absolute top-[2px] w-3.5 h-3.5 rounded-full bg-white transition-[left] duration-200 shadow-sm ${checked ? 'left-[16px]' : 'left-[2px]'}`} />
       </div>
-      {label && <span style={{ color: checked ? 'var(--text-primary)' : 'var(--text-secondary)' }}>{label}</span>}
+      {label && <span className={checked ? 'text-slate-900' : 'text-slate-600'}>{label}</span>}
     </label>
   );
 }
