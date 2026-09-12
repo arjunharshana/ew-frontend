@@ -30,7 +30,7 @@ export default function App() {
 
       <main className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 md:px-7 md:py-3.5 flex flex-col gap-3.5">
         {/* Main visualization + decision panel */}
-        <div className="flex flex-col lg:flex-row gap-3.5 flex-none lg:flex-[1_1_58%] min-h-0 shrink-0">
+        <div className="flex flex-col lg:flex-row gap-3.5 flex-none lg:flex-[3_1_0%] min-h-0">
           {/* Main Panel */}
           <div className="flex-1 flex flex-col gap-3.5 min-w-0">
             <TacticalSpectrumStrip state={sim.state} />
@@ -43,7 +43,7 @@ export default function App() {
             </div>
           </div>
           {/* Sidebar Controls */}
-          <div className="flex-none w-full lg:w-[260px] xl:w-[280px] bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col p-4 lg:p-5 shrink-0 self-start">
+          <div className="flex-none w-full lg:w-[260px] xl:w-[280px] bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col p-4 shrink-0 self-start">
             <SimulationControls
               running={sim.running}
               scenario={sim.scenario}
@@ -58,7 +58,7 @@ export default function App() {
         </div>
 
         {/* Performance */}
-        <div className="flex flex-col lg:flex-row gap-3.5 flex-none lg:flex-[1_1_38%] shrink-0 min-h-[250px] lg:min-h-0">
+        <div className="flex flex-col lg:flex-row gap-3.5 flex-none lg:flex-[2_1_0%] min-h-[250px] lg:min-h-0">
           <div className="flex-none w-full lg:w-[45%] xl:w-[38%] bg-white border border-slate-200 rounded-2xl shadow-sm p-4 lg:px-[22px] lg:py-4 self-start">
             <PerformancePanel metrics={sim.metrics} />
           </div>
@@ -66,7 +66,6 @@ export default function App() {
             <PerformanceChart data={sim.metrics.interceptionRateHistory} />
           </div>
         </div>
-
       </main>
 
       <TechnicalDrawer

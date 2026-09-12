@@ -24,9 +24,9 @@ export default function SimulationControls({ running, scenario, setScenario, sce
   const [seed, setSeed] = useState(42);
 
   return (
-    <aside className="flex flex-col gap-6 h-full">
+    <aside className="flex flex-col gap-4 h-full">
       <div>
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-2">
           <span className="text-base">⚙️</span>
           <h3 className="text-[13px] font-semibold m-0 uppercase tracking-[0.5px] text-slate-600">
             Simulation Controls
@@ -70,7 +70,7 @@ export default function SimulationControls({ running, scenario, setScenario, sce
         </div>
       </div>
 
-      <div className="flex flex-col gap-2.5 mt-4">
+      <div className="flex flex-col gap-2.5">
         <div className="grid grid-cols-2 gap-2">
           {!running ? (
             <Button primary onClick={() => actions.start(speed.replace('×', 'x'))}>▶ Start</Button>

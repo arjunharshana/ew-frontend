@@ -19,11 +19,11 @@ function Metric({ value, label, accent }) {
 export default function PerformancePanel({ metrics }) {
   return (
     <div className="py-1">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
         <h2 className="text-[14.5px] font-semibold m-0">Figures of Merit</h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-6 lg:gap-y-8 items-start">
+      <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-6 lg:gap-y-5 items-start">
         <Metric
           value={formatPercent(metrics.interceptionRate, 1)}
           label="Avg intercept rate"
