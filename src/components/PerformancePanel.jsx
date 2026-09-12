@@ -48,8 +48,8 @@ export default function PerformancePanel({ metrics }) {
           accent="#f59e0b"
         />
         <Metric
-          value={formatSeconds(metrics.averageInterceptTime)}
-          label="Avg intercept time error"
+          value={metrics.averageInterceptTime != null ? `${metrics.averageInterceptTime.toFixed(1)} steps` : '—'}
+          label="Avg intercept delay"
         />
         <Metric
           value={metrics.averageReward > 0 ? `+${metrics.averageReward.toFixed(2)}` : metrics.averageReward.toFixed(2)}
