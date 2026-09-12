@@ -2,7 +2,7 @@ import StatusIndicator from './StatusIndicator.jsx';
 
 export default function Header({ running, connectionStatus, schedulerVersion, onOpenTechnical }) {
   return (
-    <header className="flex flex-wrap md:flex-nowrap items-center justify-between py-4 px-4 md:px-7 border-b border-slate-200 bg-gradient-to-br from-blue-50 to-purple-50 gap-4">
+    <header className="flex flex-wrap md:flex-nowrap items-center justify-between py-2 px-4 md:px-7 border-b border-slate-200 bg-gradient-to-br from-blue-50 to-purple-50 gap-4">
       {/* App Title */}
       <div className="flex-1 min-w-[150px]">
         <h1 className="text-[24px] md:text-[32px] font-extrabold m-0 tracking-[0.05em] font-mono bg-gradient-to-br from-orange-500 to-red-500 bg-clip-text text-transparent leading-none">

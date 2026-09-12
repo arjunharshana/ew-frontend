@@ -38,8 +38,9 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
   const [hover, setHover] = useState(null);
   const [showTruth, setShowTruth] = useState(false);
 
-  // Fallback to FREQ_BIN_TABLE if bandsMhz is missing
-  const freqValues = bandsMhz && bandsMhz.length > 0 ? bandsMhz : FREQ_BIN_TABLE.map((b) => b.freq);
+  // Use dynamic bands but cap the graph at 790MHz max
+  let freqValues = bandsMhz && bandsMhz.length > 0 ? bandsMhz : FREQ_BIN_TABLE.map((b) => b.freq);
+  freqValues = freqValues.filter(f => f <= 790);
   const minFreq = Math.min(...freqValues);
   const maxFreq = Math.max(...freqValues);
 
@@ -86,7 +87,12 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
     ctx.strokeStyle = COLORS.grid;
     ctx.lineWidth = 1;
     freqValues.forEach((f, i) => {
+      // Draw grid line on the step, OR the first/last item
       if (i % labelStep !== 0 && i !== freqValues.length - 1 && i !== 0) return;
+      
+      // If it's the last item, don't draw it if it's too close to the previous step (e.g. index 44 and 42)
+      if (i === freqValues.length - 1 && (i % labelStep) < 3) return;
+
       const y = yForFreq(f);
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
@@ -245,7 +251,7 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col flex-1 min-h-0 w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-1">
         <div>
           <h2 className="text-[14.5px] font-semibold m-0">Frequency activity</h2>
@@ -273,6 +279,8 @@ export default function FrequencyActivity({ scanHistory, predictedFrequency, ban
           {freqValues.map((f, i) => {
             const labelStep = Math.max(1, Math.ceil(freqValues.length / 8));
             if (i % labelStep !== 0 && i !== freqValues.length - 1 && i !== 0) return null;
+            if (i === freqValues.length - 1 && (i % labelStep) < 3) return null;
+
             const plotH = size.height - padding.top - padding.bottom;
             const y = padding.top + (1 - (f - minFreq) / (maxFreq - minFreq)) * plotH;
             return (

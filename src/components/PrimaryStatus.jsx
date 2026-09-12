@@ -36,23 +36,23 @@ function ConfidenceRing({ confidence }) {
 function StatusBlock({ label, value, sub, accent }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[13px] font-semibold text-slate-600 uppercase tracking-[0.5px]">{label}</span>
+      <span className="text-[12px] font-semibold text-slate-600 uppercase tracking-[0.5px]">{label}</span>
       <span
-        className={`mono text-[32px] font-bold leading-[1.1] ${!accent ? 'text-slate-900' : ''}`}
+        className={`mono text-[28px] font-bold leading-[1.1] ${!accent ? 'text-slate-900' : ''}`}
         style={accent ? { color: accent, textShadow: `0 2px 12px ${accent}40` } : {}}
       >
         {value}
       </span>
-      <span className="text-[13px] font-medium text-slate-400">{sub}</span>
+      <span className="text-[12px] font-medium text-slate-400">{sub}</span>
     </div>
   );
 }
 
 export default function PrimaryStatus({ state }) {
   return (
-    <section className="flex flex-wrap xl:flex-nowrap gap-4 lg:gap-8 px-4 lg:px-6 py-3 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-slate-200 shadow-sm items-center justify-between">
-      <div className="flex flex-wrap xl:flex-nowrap gap-4 lg:gap-8 items-center flex-1">
-        <div className="border-l-4 border-blue-500 pl-4 lg:pl-5 shrink-0">
+    <section className="flex flex-wrap xl:flex-nowrap gap-3 lg:gap-4 px-4 lg:px-6 py-2 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-slate-200 shadow-sm items-center justify-between">
+      <div className="flex flex-wrap xl:flex-nowrap gap-3 lg:gap-6 items-center flex-1">
+        <div className="border-l-4 border-blue-500 pl-3 lg:pl-4 shrink-0">
           <StatusBlock
             label="Current scan"
             value={formatMHz(state.currentFrequency)}
@@ -61,7 +61,7 @@ export default function PrimaryStatus({ state }) {
           />
         </div>
 
-        <div className="border-l-4 border-amber-500 pl-4 lg:pl-5 shrink-0">
+        <div className="border-l-4 border-amber-500 pl-3 lg:pl-4 shrink-0">
           <StatusBlock
             label="Predicted next"
             value={formatMHz(state.predictedFrequency)}
@@ -70,19 +70,19 @@ export default function PrimaryStatus({ state }) {
           />
         </div>
 
-        <div className="flex items-center gap-3 shrink-0 lg:pl-2">
+        <div className="flex items-center gap-2.5 shrink-0 lg:pl-1">
           <ConfidenceRing confidence={state.confidence} />
           <div className="flex flex-col gap-0.5">
-            <span className="text-[13px] font-semibold text-slate-600 uppercase tracking-[0.5px]">Confidence</span>
-            <span className="mono text-[32px] font-bold leading-[1.1] text-amber-500 [text-shadow:0_2px_12px_#fef3c7]">
+            <span className="text-[12px] font-semibold text-slate-600 uppercase tracking-[0.5px]">Confidence</span>
+            <span className="mono text-[28px] font-bold leading-[1.1] text-amber-500 [text-shadow:0_2px_12px_#fef3c7]">
               {formatPercent(state.confidence)}
             </span>
-            <span className="text-[13px] font-medium text-slate-400">{state.confidenceLabel}</span>
+            <span className="text-[12px] font-medium text-slate-400">{state.confidenceLabel}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap md:flex-nowrap gap-4 lg:gap-8 items-center mt-2 xl:mt-0 pt-2 xl:pt-0 border-t xl:border-t-0 xl:border-l border-slate-200 xl:pl-8 shrink-0 w-full xl:w-auto">
+      <div className="flex flex-wrap md:flex-nowrap gap-4 lg:gap-6 items-center mt-1 xl:mt-0 pt-1 xl:pt-0 border-t xl:border-t-0 xl:border-l border-slate-200 xl:pl-6 shrink-0 w-full xl:w-auto">
         <div className="flex gap-4 lg:gap-8 shrink-0">
           <StatusBlock
             label="Total steps"

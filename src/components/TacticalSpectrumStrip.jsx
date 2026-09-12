@@ -10,13 +10,13 @@ export default function TacticalSpectrumStrip({ state }) {
     : null;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl px-4 md:px-5 py-4 flex flex-col gap-4">
+    <div className="bg-white border border-slate-200 rounded-2xl px-4 md:px-5 py-3 flex flex-col gap-2.5">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-[20px] shrink-0">📡</span>
-          <span className="text-sm md:text-base font-bold text-slate-600 tracking-[0.5px] uppercase">
-            TACTICAL SPECTRUM STRIP <span className="hidden sm:inline">({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz • 20 MHz IBW)</span>
+          <span className="text-[18px] shrink-0">📡</span>
+          <span className="text-sm md:text-[15px] font-bold text-slate-600 tracking-[0.5px] uppercase leading-none mt-0.5">
+            TACTICAL SPECTRUM STRIP <span className="hidden sm:inline">({bands.length} CHANNELS • {Math.min(...bands)} MHz — {Math.max(...bands)} MHz)</span>
           </span>
         </div>
         
@@ -76,8 +76,8 @@ export default function TacticalSpectrumStrip({ state }) {
           }
 
           return (
-            <div key={i} className={`box-border flex-1 min-w-0 h-[52px] rounded flex flex-col justify-center items-center gap-0.5 relative ${borderClass} ${bgClass} ${shadowClass}`}>
-              <span className="text-[9px] font-semibold text-slate-600">B{i}</span>
+            <div key={i} className={`box-border flex-1 min-w-0 h-[44px] rounded flex flex-col justify-center items-center gap-0.5 relative ${borderClass} ${bgClass} ${shadowClass}`}>
+              <span className="text-[9px] font-semibold text-slate-600 leading-none mt-0.5">B{i}</span>
               <span className={`mono text-xs font-bold tracking-[-0.5px] ${numColorClass}`}>{freq}</span>
               
               {/* Emitter Truth Dot */}
